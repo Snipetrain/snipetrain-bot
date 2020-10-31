@@ -1,5 +1,5 @@
 {
-    "token": "NzcxMTMyNDgwNjc3NDc4NDQx.X5nrFg.MFI7Y8GM0z8HcphouPnSgDra7AA",
+    "token": "",
     "prefixChar": "!",
     "endpoints": {
         "snipetrain-api": "http://localhost:5000"
