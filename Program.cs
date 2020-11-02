@@ -9,6 +9,7 @@ namespace snipetrain_bot
 {
     class Program
     {
+        
         static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
@@ -39,5 +40,6 @@ namespace snipetrain_bot
 
             return services.BuildServiceProvider();
         }
+        
     }
 }

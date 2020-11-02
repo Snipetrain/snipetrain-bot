@@ -41,6 +41,7 @@ namespace snipetrain_bot
         {
             _client.MessageReceived += HandleCommand;
             await _commands.AddModuleAsync<RankModule>(_services);
+            await _commands.AddModuleAsync<StreamEvent>(_services);
         }
 
         public async Task HandleCommand(SocketMessage messageParam)
