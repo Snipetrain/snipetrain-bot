@@ -20,7 +20,7 @@ This is the Discord bot Service for the Snipetrain Discord server giving access 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
 - [.NET Core 3.1](https://dotnet.microsoft.com/) - Server Environment & C# Framework
-- [Discord.NET](https://dotnet.microsoft.com/apps/aspnet) - Web API Framework
+- [Discord.NET](https://github.com/discord-net/Discord.Net) - Discord Wrapper for .NET 
 
 ## ✍️ Authors <a name = "authors"></a>
 
