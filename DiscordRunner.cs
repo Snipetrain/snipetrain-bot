@@ -31,7 +31,7 @@ namespace snipetrain_bot
 
             await InstallCommandsAsync();
 
-            await _client.LoginAsync(TokenType.Bot, _config["token"]);
+            await _client.LoginAsync(TokenType.Bot, _config["discordToken"]);
             await _client.StartAsync();
 
             await Task.Delay(-1);
@@ -41,7 +41,7 @@ namespace snipetrain_bot
         {
             _client.MessageReceived += HandleCommand;
             await _commands.AddModuleAsync<RankModule>(_services);
-            await _commands.AddModuleAsync<StreamEvent>(_services);
+            await _commands.AddModuleAsync<StreamModule>(_services);
         }
 
         public async Task HandleCommand(SocketMessage messageParam)
