@@ -4,6 +4,7 @@ using Discord;
 using Discord.Commands;
 using Discord.Net.WebSockets;
 using Microsoft.Extensions.Configuration;
+using snipetrain_bot.Models;
 using snipetrain_bot.Services;
 
 
@@ -28,9 +29,9 @@ namespace snipetrain_bot.Modules
         {
             try
             {
-                var streamer = await _streamersService.GetStreamerAsync(name);
+                var dbStreamer = await _streamersService.GetStreamerAsync(name);
 
-                if (streamer != null)
+                if (dbStreamer != null)
                     throw new StreamerAlreadyExistsException("Streamer already exists in DB!");
 
                 var twitchUser = await _twitchService.GetTwitchUser(name);
@@ -38,9 +39,12 @@ namespace snipetrain_bot.Modules
                 // TODO: 
                 // Subscribe to new user StreamChange Event
 
-                streamer.Name = name;
-                streamer.TwitchUserId = twitchUser.Id;
-                
+                var streamer = new StreamersSchema()
+                {
+                    Name = name,
+                    TwitchUserId = twitchUser.Id
+                };
+
                 await _streamersService.AddStreamerAsync(streamer);
 
                 await ReplyAsync($"Succesfully added streamer <{name}> !");

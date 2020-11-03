@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace snipetrain_bot.Models
 {
-    public class TwitchWrapper<T>
+    public class TwitchUserWrapper
     {
-        public T[] Data { get; set; }
+        public List<TwitchUser> Data { get; set; }
     }
 
     public class TwitchUser
@@ -18,6 +19,5 @@ namespace snipetrain_bot.Models
         public Uri ProfileImageUrl { get; set; }
         public Uri OfflineImageUrl { get; set; }
         public long ViewCount { get; set; }
-        public string Email { get; set; }
     }
 }

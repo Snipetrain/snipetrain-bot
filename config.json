@@ -1,9 +1,14 @@
 {
     "discordToken": "",
-    "twitchToken": "",
     "prefixChar": "!",
+    "twitchConfig": {
+        "clientId": "",
+        "clientSecret": ""
+    },
     "endpoints": {
-        "snipetrain-api": "http://localhost:5000"
+        "snipetrain-api": "http://localhost:5000",
+        "twitch-api": "https://api.twitch.tv/helix",
+        "twitch-auth": "https://id.twitch.tv/oauth2"
     },
     "connectionStrings": {
         "snipetrain": "mongodb://localhost:27017"

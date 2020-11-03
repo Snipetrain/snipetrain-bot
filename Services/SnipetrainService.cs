@@ -9,7 +9,7 @@ namespace snipetrain_bot.Services
     public class SnipetrainService : ISnipetrainService
     {
 
-        private RestClient _client;
+        private readonly RestClient _client;
 
         public SnipetrainService(IConfiguration configuration)
         {

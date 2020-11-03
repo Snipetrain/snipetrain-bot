@@ -23,7 +23,6 @@ namespace snipetrain_bot
             var servicesProvider = BuildDi(configuration);
 
             var runner = servicesProvider.GetRequiredService<DiscordRunner>();
-
             await runner.StartClient(servicesProvider, configuration);
 
             Console.WriteLine("Press ANY key to exit");
@@ -36,10 +35,11 @@ namespace snipetrain_bot
 
             services.AddScoped<ISnipetrainService, SnipetrainService>();
             services.AddScoped<IStreamersService, StreamersService>();
-            services.AddScoped<ITwitchService, TwitchService>();
 
-            services.AddTransient<DiscordRunner>();
+            services.AddSingleton<ITwitchService, TwitchService>();
             services.AddSingleton<IConfiguration>(configuration);
+            
+            services.AddTransient<DiscordRunner>();
 
             return services.BuildServiceProvider();
         }

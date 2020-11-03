@@ -8,6 +8,7 @@ using Discord.Commands;
 using System.Reflection;
 using snipetrain_bot.Modules;
 using Microsoft.Extensions.Configuration;
+using snipetrain_bot.Services;
 
 namespace snipetrain_bot
 {
@@ -17,10 +18,12 @@ namespace snipetrain_bot
         private CommandService _commands;
         private IServiceProvider _services;
         private IConfiguration _config;
+        private readonly ITwitchService _twitchService;
 
-        public DiscordRunner()
+        public DiscordRunner(ITwitchService twitchService)
         {
             _commands = new CommandService();
+            _twitchService = twitchService;
         }
 
         public async Task StartClient(IServiceProvider services, IConfiguration config)
@@ -30,6 +33,8 @@ namespace snipetrain_bot
             _client = new DiscordSocketClient();
 
             await InstallCommandsAsync();
+
+            await _twitchService.AuthenticateTwitch();
 
             await _client.LoginAsync(TokenType.Bot, _config["discordToken"]);
             await _client.StartAsync();
