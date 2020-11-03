@@ -1,7 +1,11 @@
 {
-    "token": "",
+    "discordToken": "",
+    "twitchToken": "",
     "prefixChar": "!",
     "endpoints": {
         "snipetrain-api": "http://localhost:5000"
+    },
+    "connectionStrings": {
+        "snipetrain": "mongodb://localhost:27017"
     }
 }
