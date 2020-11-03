@@ -34,8 +34,11 @@ namespace snipetrain_bot
         {
             var services = new ServiceCollection();
 
-            services.AddTransient<DiscordRunner>();
+            services.AddScoped<ISnipetrainService, SnipetrainService>();
+            services.AddScoped<IStreamersService, StreamersService>();
+            services.AddScoped<ITwitchService, TwitchService>();
 
+            services.AddTransient<DiscordRunner>();
             services.AddSingleton<IConfiguration>(configuration);
 
             return services.BuildServiceProvider();

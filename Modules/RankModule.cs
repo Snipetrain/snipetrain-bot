@@ -10,13 +10,13 @@ namespace snipetrain_bot.Modules
     [Group("rank")]
     public class RankModule : ModuleBase
     {
-        private HttpClientService _httpService;
+        private ISnipetrainService _stService;
         private IConfiguration _config;
 
-        public RankModule(IConfiguration configuration)
+        public RankModule(IConfiguration configuration, ISnipetrainService stService)
         {
             _config = configuration;
-            _httpService = new HttpClientService(_config.GetSection("endpoints")["snipetrain-api"]);
+            _stService = stService;
         }
 
         [Command("player")]
@@ -24,7 +24,7 @@ namespace snipetrain_bot.Modules
         {
             try
             {
-                var res = await _httpService.GetRankAsync(query, "tf", 10);
+                var res = await _stService.GetRankAsync(query, "tf", 10);
 
                 foreach (var player in res.Payload)
                 {
@@ -58,7 +58,7 @@ namespace snipetrain_bot.Modules
         {
             try
             {
-                var res = await _httpService.GetTop10Async("tf");
+                var res = await _stService.GetTop10Async("tf");
                 foreach (var player in res.Payload)
                 {
                     decimal KDR = Math.Round((decimal)int.Parse(player.Kills) / int.Parse(player.Deaths), 2);
