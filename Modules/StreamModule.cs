@@ -7,14 +7,12 @@ using Microsoft.Extensions.Configuration;
 using snipetrain_bot.Models;
 using snipetrain_bot.Services;
 
-
 namespace snipetrain_bot.Modules
 {
     [Group("stream")]
 
     public class StreamModule : ModuleBase
     {
-
         private readonly IStreamersService _streamersService;
         private readonly ITwitchService _twitchService;
 
@@ -49,7 +47,7 @@ namespace snipetrain_bot.Modules
 
                 await ReplyAsync($"Succesfully added streamer <{name}> !");
             }
-            catch(StreamerAlreadyExistsException e)
+            catch (StreamerAlreadyExistsException e)
             {
                 await ReplyAsync(e.Message);
             }
@@ -77,7 +75,7 @@ namespace snipetrain_bot.Modules
 
                 await ReplyAsync($"Succesfully Removed streamer <{name}> !");
             }
-            catch(StreamerDoesntExistsException e)
+            catch (StreamerDoesntExistsException e)
             {
                 await ReplyAsync(e.Message);
             }

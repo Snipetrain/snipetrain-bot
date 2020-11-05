@@ -9,7 +9,7 @@ namespace snipetrain_bot
 {
     class Program
     {
-        
+
         static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
@@ -35,14 +35,16 @@ namespace snipetrain_bot
 
             services.AddScoped<ISnipetrainService, SnipetrainService>();
             services.AddScoped<IStreamersService, StreamersService>();
+            services.AddScoped<IEventService, EventService>();
+
 
             services.AddSingleton<ITwitchService, TwitchService>();
             services.AddSingleton<IConfiguration>(configuration);
-            
+
             services.AddTransient<DiscordRunner>();
 
             return services.BuildServiceProvider();
         }
-        
+
     }
 }
