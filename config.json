@@ -1,6 +1,9 @@
 {
     "discordToken": "",
     "prefixChar": "!",
+    "discordChannels": {
+        "stream-announcement": 774057035012505630
+    },
     "twitchConfig": {
         "clientId": "",
         "clientSecret": ""

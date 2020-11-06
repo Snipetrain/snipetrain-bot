@@ -56,7 +56,7 @@ namespace snipetrain_bot
         {
             try
             {
-                var socketChannel = _client.GetChannel(ulong.Parse(_config.GetSection("discord-channels")["stream-announcement"])) as IMessageChannel; 
+                var socketChannel = _client.GetChannel(ulong.Parse(_config.GetSection("discordChannels")["stream-announcement"])) as IMessageChannel; 
                 await socketChannel.SendMessageAsync(message);
             }
             catch (Exception e)
