@@ -26,8 +26,8 @@ namespace snipetrain_bot.Services
             _streamerService = streamersService;
             _serviceProvider = serviceProvider;
 
-            _apiClient = new RestClient(_config.GetSection("endpoints")["twitch-api"]);
-            _authClient = new RestClient(_config.GetSection("endpoints")["twitch-auth"]);
+            _apiClient = new RestClient(_config.GetSection("twitch").GetSection("endpoints")["twitch-api"]);
+            _authClient = new RestClient(_config.GetSection("twitch").GetSection("endpoints")["twitch-auth"]);
         }
 
         public async Task<TwitchUser> GetTwitchUser(string twitchUser)
@@ -35,7 +35,7 @@ namespace snipetrain_bot.Services
             var request = new RestRequest($"/users?login={twitchUser}");
 
             request.AddHeader("Authorization", $"Bearer {TwitchToken}");
-            request.AddHeader("Client-Id", _config.GetSection("twitchConfig")["clientId"]);
+            request.AddHeader("Client-Id", _config.GetSection("twitch")["clientId"]);
 
             var res = await _apiClient.GetAsync<TwitchUserWrapper>(request);
 
@@ -46,8 +46,8 @@ namespace snipetrain_bot.Services
         {
             try
             {
-                var clientId = _config.GetSection("twitchConfig")["clientId"];
-                var clientSecret = _config.GetSection("twitchConfig")["clientSecret"];
+                var clientId = _config.GetSection("twitch")["clientId"];
+                var clientSecret = _config.GetSection("twitch")["clientSecret"];
 
                 var request = new RestRequest($"/token?client_id={clientId}&client_secret={clientSecret}&grant_type=client_credentials");
                 var res = await _authClient.PostAsync<OAuthResponse>(request);

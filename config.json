@@ -1,17 +1,23 @@
 {
-    "discordToken": "",
     "prefixChar": "!",
-    "discordChannels": {
-        "stream-announcement": 774057035012505630
+    "discord": {
+        "discordToken": "",
+        "discordChannels": {
+            "stream-announcement": 774057035012505630
+        }
     },
-    "twitchConfig": {
+    "twitch": {
         "clientId": "",
-        "clientSecret": ""
+        "clientSecret": "",
+        "endpoints": {
+            "twitch-api": "https://api.twitch.tv/helix",
+            "twitch-auth": "https://id.twitch.tv/oauth2"
+        }
     },
-    "endpoints": {
-        "snipetrain-api": "http://localhost:5000",
-        "twitch-api": "https://api.twitch.tv/helix",
-        "twitch-auth": "https://id.twitch.tv/oauth2"
+    "snipetrain": {
+        "endpoints": {
+            "snipetrain-api": "http://localhost:5000"
+        }
     },
     "connectionStrings": {
         "snipetrain": "mongodb://localhost:27017"

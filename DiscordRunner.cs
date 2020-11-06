@@ -38,7 +38,7 @@ namespace snipetrain_bot
             await _twitchService.AuthenticateTwitch();
             await _twitchService.AddAllTwitchSubscriptions();
 
-            await _client.LoginAsync(TokenType.Bot, _config["discordToken"]);
+            await _client.LoginAsync(TokenType.Bot, _config.GetSection("discord")["discordToken"]);
             await _client.StartAsync();
 
 
@@ -56,7 +56,7 @@ namespace snipetrain_bot
         {
             try
             {
-                var socketChannel = _client.GetChannel(ulong.Parse(_config.GetSection("discordChannels")["stream-announcement"])) as IMessageChannel; 
+                var socketChannel = _client.GetChannel(ulong.Parse(_config.GetSection("discord").GetSection("discordChannels")["stream-announcement"])) as IMessageChannel; 
                 await socketChannel.SendMessageAsync(message);
             }
             catch (Exception e)
