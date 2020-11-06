@@ -12,7 +12,7 @@ using snipetrain_bot.Services;
 
 namespace snipetrain_bot
 {
-    class DiscordRunner
+    public class DiscordRunner
     {
         private DiscordSocketClient _client;
         private CommandService _commands;
@@ -20,24 +20,27 @@ namespace snipetrain_bot
         private IConfiguration _config;
         private readonly ITwitchService _twitchService;
 
-        public DiscordRunner(ITwitchService twitchService)
+        public DiscordRunner(ITwitchService twitchService, IConfiguration config)
         {
             _commands = new CommandService();
             _twitchService = twitchService;
+            _config = config;
         }
 
-        public async Task StartClient(IServiceProvider services, IConfiguration config)
+        public async Task StartClient(IServiceProvider services)
         {
             _services = services;
-            _config = config;
+            
             _client = new DiscordSocketClient();
 
             await InstallCommandsAsync();
 
             await _twitchService.AuthenticateTwitch();
+            await _twitchService.AddAllTwitchSubscriptions();
 
             await _client.LoginAsync(TokenType.Bot, _config["discordToken"]);
             await _client.StartAsync();
+
 
             await Task.Delay(-1);
         }
@@ -47,6 +50,19 @@ namespace snipetrain_bot
             _client.MessageReceived += HandleCommand;
             await _commands.AddModuleAsync<RankModule>(_services);
             await _commands.AddModuleAsync<StreamModule>(_services);
+        }
+
+        public async Task SendMessage(string message)
+        {
+            try
+            {
+                var socketChannel = _client.GetChannel(ulong.Parse(_config.GetSection("discord-channels")["stream-announcement"])) as IMessageChannel; 
+                await socketChannel.SendMessageAsync(message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error while trying to send Message to Channel :: {e.ToString()}");
+            }
         }
 
         public async Task HandleCommand(SocketMessage messageParam)
