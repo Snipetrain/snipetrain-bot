@@ -1,9 +1,22 @@
 {
     "prefixChar": "!",
     "discord": {
-        "discordToken": "",
-        "discordChannels": {
+        "token": "",
+        "guildId": 771142492032598016,
+        "emotes": {
+            "stream": "mm"
+        },
+        "channels": {
             "stream-announcement": 774057035012505630
+        },
+        "messages": {
+            "streamReaction": 774728592851599393
+        },
+        "roles": {
+            "stream": {
+                "id": "774722305506672680",
+                "name": "StreamWatchers"
+            }
         }
     },
     "twitch": {
