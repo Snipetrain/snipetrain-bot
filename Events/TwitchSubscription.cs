@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using TwitchLib.PubSub;
 using TwitchLib.PubSub.Events;
 
@@ -11,18 +12,21 @@ namespace snipetrain_bot.Events
         private readonly TwitchPubSub _client;
         private readonly string _token;
         private readonly DiscordRunner _runner;
-        public TwitchSubscription(DiscordRunner runner, string twitchUsername, string twitchUserId, string token)
+        private readonly IConfiguration _config;
+        public TwitchSubscription(DiscordRunner runner, IConfiguration config, string twitchUsername, string twitchUserId, string token)
         {
             Username = twitchUsername;
+
             _token = token;
             _runner = runner;
+            _config = config;
 
             _client = new TwitchPubSub();
 
             _client.OnPubSubServiceConnected += onPubSubServiceConnected;
             _client.OnListenResponse += onListenResponse;
             _client.OnStreamUp += onStreamUp;
-
+            
             _client.ListenToVideoPlayback(twitchUsername);
             
             _client.Connect();
@@ -46,7 +50,9 @@ namespace snipetrain_bot.Events
         }
         private async void onStreamUp(object sender, OnStreamUpArgs e)
         {
-            await _runner.SendMessage($"{Username} just went online on Twitch! URL: https://twitch.tv/{Username}");
+            var streamChannelId = ulong.Parse(_config.GetSection("discord").GetSection("channels")["stream-announcement"]);
+            var roleId = _config.GetSection("discord").GetSection("roles").GetSection("stream")["id"];
+            await _runner.SendMessage($"[ <@&{roleId}> ] {Username} just went online on Twitch! URL: https://twitch.tv/{Username}", streamChannelId);
         }
     }
 }

@@ -72,7 +72,7 @@ namespace snipetrain_bot.Services
         public void AddTwitchSubscription(string twitchUsername, string twitchUserId)
         {
             var runner = _serviceProvider.GetService(typeof(DiscordRunner)) as DiscordRunner;
-            Subscriptions.Add(new TwitchSubscription(runner, twitchUsername, twitchUserId, TwitchToken));
+            Subscriptions.Add(new TwitchSubscription(runner, _config, twitchUsername, twitchUserId, TwitchToken));
         }
 
         public void RemoveTwitchSubscription(string twitchUsername)
