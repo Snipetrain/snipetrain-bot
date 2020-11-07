@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using RestSharp;
 using snipetrain_bot.Models;
 
 namespace snipetrain_bot.Services
 {
-    public class HttpClientService
+    public class SnipetrainService : ISnipetrainService
     {
 
-        private RestClient _client;
+        private readonly RestClient _client;
 
-        public HttpClientService(string baseUri)
+        public SnipetrainService(IConfiguration configuration)
         {
-            _client = new RestClient(baseUri);
+            _client = new RestClient(configuration.GetSection("snipetrain").GetSection("endpoints")["snipetrain-api"]);
         }
 
         public async Task<Pagination<List<Player>>> GetRankAsync(string query, string game, int perPage)

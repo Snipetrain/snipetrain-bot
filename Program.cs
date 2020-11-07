@@ -22,22 +22,26 @@ namespace snipetrain_bot
             var servicesProvider = BuildDi(configuration);
 
             var runner = servicesProvider.GetRequiredService<DiscordRunner>();
-
-            await runner.StartClient(servicesProvider, configuration);
+            await runner.StartClient(servicesProvider);
 
             Console.WriteLine("Press ANY key to exit");
             Console.ReadLine();
         }
 
-        private static IServiceProvider BuildDi(IConfiguration configuration)
+        private IServiceProvider BuildDi(IConfiguration configuration)
         {
             var services = new ServiceCollection();
 
-            services.AddTransient<DiscordRunner>();
+            services.AddScoped<ISnipetrainService, SnipetrainService>();
+            services.AddScoped<IStreamersService, StreamersService>();
 
+            services.AddSingleton<ITwitchService, TwitchService>();
             services.AddSingleton<IConfiguration>(configuration);
+            
+            services.AddSingleton<DiscordRunner>();
 
             return services.BuildServiceProvider();
         }
+        
     }
 }
