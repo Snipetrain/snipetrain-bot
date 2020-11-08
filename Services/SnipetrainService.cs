@@ -13,7 +13,7 @@ namespace snipetrain_bot.Services
 
         public SnipetrainService(IConfiguration configuration)
         {
-            _client = new RestClient(configuration.GetSection("endpoints")["snipetrain-api"]);
+            _client = new RestClient(configuration.GetSection("snipetrain").GetSection("endpoints")["snipetrain-api"]);
         }
 
         public async Task<Pagination<List<Player>>> GetRankAsync(string query, string game, int perPage)

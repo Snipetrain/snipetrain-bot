@@ -35,8 +35,7 @@ namespace snipetrain_bot.Modules
 
                 var twitchUser = await _twitchService.GetTwitchUser(name);
 
-                // TODO: 
-                // Subscribe to new user StreamChange Event
+                _twitchService.AddTwitchSubscription(name, twitchUser.Id);
 
                 var streamer = new StreamersSchema()
                 {
@@ -57,9 +56,9 @@ namespace snipetrain_bot.Modules
                 Console.WriteLine(e.ToString());
                 await ReplyAsync($"Error while trying to add a streamer :: Check Logs");
             }
-        }
+        } 
 
-        [Command("delete")]
+        [Command("remove")]
         public async Task DeleteStream([Remainder] string name)
         {
             try
@@ -69,8 +68,7 @@ namespace snipetrain_bot.Modules
                 if (streamer == null)
                     throw new StreamerDoesntExistsException("Streamer doesn't exists in DB!");
 
-                // TODO: 
-                // Un-Subscribe from new user StreamChange Event
+                _twitchService.RemoveTwitchSubscription(name);
 
                 await _streamersService.DeleteStreamerAsync(name);
 
