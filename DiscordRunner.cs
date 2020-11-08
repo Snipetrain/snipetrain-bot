@@ -48,10 +48,12 @@ namespace snipetrain_bot
             await _commands.AddModuleAsync<RankModule>(_services);
             await _commands.AddModuleAsync<StreamModule>(_services);
             await _commands.AddModuleAsync<EventModule>(_services);
+            
         }
 
         public async Task HandleCommand(SocketMessage messageParam)
         {
+            
             var message = messageParam as SocketUserMessage;
             if (message == null) return;
 

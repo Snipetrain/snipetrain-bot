@@ -27,6 +27,7 @@ namespace snipetrain_bot.Modules
         {
             try
             {
+
                 var dbStreamer = await _streamersService.GetStreamerAsync(name);
 
                 if (dbStreamer != null)

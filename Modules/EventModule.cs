@@ -26,12 +26,12 @@ namespace snipetrain_bot.Modules
             try
             {
                 var user = Context.User.ToString();
-                var time = DateTime.Now.ToString();
+                var andate = DateTime.Now.ToString();
                 var events = new EventSchema
                 {
                     Prize = prize,
                     Message = message,
-                    AnDate = time,
+                    AnDate = andate,
                     Name = user
                 };
                 await _eventservice.AddEventAsync(events);
