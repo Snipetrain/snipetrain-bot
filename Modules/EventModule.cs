@@ -21,18 +21,20 @@ namespace snipetrain_bot.Modules
 
         }
         [Command("add")]
-        public async Task addEvent(string prize, [Remainder] string message)
+        public async Task addEvent(string prize,int addDaysNum, [Remainder] string message)
         {
             try
             {
                 var user = Context.User.ToString();
+                var eventDay = DateTime.Now.AddDays(addDaysNum).ToShortDateString().ToString();
                 var andate = DateTime.Now.ToString();
                 var events = new EventSchema
                 {
                     Prize = prize,
                     Message = message,
                     AnDate = andate,
-                    Name = user
+                    Name = user,
+                    EventDay = eventDay
                 };
                 await _eventservice.AddEventAsync(events);
             }
