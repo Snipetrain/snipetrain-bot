@@ -33,6 +33,6 @@ namespace snipetrain_bot.Services
         {
             await _Event.DeleteOneAsync(s => s.Id == id);
         }
-        
+
     }
 }

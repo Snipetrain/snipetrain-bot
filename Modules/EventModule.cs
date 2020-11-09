@@ -1,11 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
-using Discord.Net.WebSockets;
-using Discord.WebSocket;
-using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
 using snipetrain_bot.Models;
 using snipetrain_bot.Services;
 

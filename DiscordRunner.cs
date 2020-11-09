@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Discord;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using Discord.Commands;
-using System.Reflection;
 using snipetrain_bot.Modules;
 using Microsoft.Extensions.Configuration;
 using snipetrain_bot.Services;
@@ -59,6 +56,7 @@ namespace snipetrain_bot
             await _commands.AddModuleAsync<RankModule>(_services);
             await _commands.AddModuleAsync<StreamModule>(_services);
             await _commands.AddModuleAsync<EventModule>(_services);
+            await _commands.AddModuleAsync<KickModule>(_services);
             
         }
 
