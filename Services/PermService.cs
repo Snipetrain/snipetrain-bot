@@ -1,0 +1,48 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
+using snipetrain_bot.Models;
+using Discord;
+
+
+namespace snipetrain_bot.Services
+{
+    public class PermService : IPermService
+    {
+        private readonly IMongoCollection<PermissionSchema> _Kick;
+        private readonly IMongoCollection<PermissionSchema> _Ban;
+        private readonly IMongoCollection<PermissionSchema> _Warn;
+        public PermService(IConfiguration configuration)
+        {
+            var client = new MongoClient(configuration.GetSection("connectionStrings")["snipetrain"]);
+            var database = client.GetDatabase("UserInteractions");
+
+            _Kick = database.GetCollection<PermissionSchema>("Kick");
+            _Ban = database.GetCollection<PermissionSchema>("Ban");
+            _Warn = database.GetCollection<PermissionSchema>("Warn");
+
+        }
+        public async Task AddKickAsync(PermissionSchema model)
+        {
+            await _Kick.InsertOneAsync(model);
+        }
+        public async Task AddBanAsync(PermissionSchema model)
+        {
+            await _Ban.InsertOneAsync(model);
+        }
+        public async Task AddWarnAsync(PermissionSchema model)
+        {
+            await _Warn.InsertOneAsync(model);
+        }
+        public async Task<List<PermissionSchema>> GetDocsAsync()
+        {
+            return (await _Warn.FindAsync(s => true)).ToList();
+        }
+        public async Task<PermissionSchema> GetDocsAsync(IGuildUser user)
+        {
+            var docnum =  await (await _Warn.CountDocumentsAsync(s => s.User == user.ToString()));
+            
+        }
+    }
+}
