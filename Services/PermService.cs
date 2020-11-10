@@ -41,8 +41,7 @@ namespace snipetrain_bot.Services
         }
         public async Task<PermissionSchema> GetDocsAsync(IGuildUser user)
         {
-            var docnum =  await (await _Warn.CountDocumentsAsync(s => s.User == user.ToString()));
-            
+            return await (await _Warn.CountDocumentsAsync(s => s.User == user.ToString()));
         }
     }
 }
