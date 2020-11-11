@@ -37,7 +37,7 @@ namespace snipetrain_bot.Services
             request.AddHeader("Authorization", $"Bearer {TwitchToken}");
             request.AddHeader("Client-Id", _config.GetSection("twitch")["clientId"]);
 
-            var res = await _apiClient.GetAsync<TwitchUserWrapper>(request);
+            var res = await _apiClient.GetAsync<TwitchWrapper<TwitchUser>>(request);
 
             return res.Data[0];
         }

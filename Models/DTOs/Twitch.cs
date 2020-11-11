@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace snipetrain_bot.Models
 {
-    public class TwitchUserWrapper
+    public class TwitchWrapper<T>
     {
-        public List<TwitchUser> Data { get; set; }
+        public List<T> Data { get; set; }
     }
 
     public class TwitchUser
