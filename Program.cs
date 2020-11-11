@@ -9,20 +9,26 @@ namespace snipetrain_bot
 {
     class Program
     {
+        private DiscordRunner _runner;
+
         static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
         public async Task MainAsync()
         {
+	        Console.WriteLine("Launching SnipeBot, connecting..."); 
+
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("config.json")
                 .Build();
 
+	        Console.CancelKeyPress += new ConsoleCancelEventHandler(Console_CancelKeyPress);
+
             var servicesProvider = BuildDi(configuration);
 
-            var runner = servicesProvider.GetRequiredService<DiscordRunner>();
-            await runner.StartClient(servicesProvider);
+            _runner = servicesProvider.GetRequiredService<DiscordRunner>();
+            await _runner.StartClient(servicesProvider);
 
             Console.WriteLine("Press ANY key to exit");
             Console.ReadLine();
@@ -41,6 +47,13 @@ namespace snipetrain_bot
             services.AddSingleton<DiscordRunner>();
 
             return services.BuildServiceProvider();
+        }
+
+        // On Shut down
+        private async void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            Console.WriteLine("\nShutting down SnipeBot, disconnecting Bot...");
+	        await _runner.StopClient();
         }
         
     }

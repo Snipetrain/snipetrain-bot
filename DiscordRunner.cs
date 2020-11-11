@@ -43,10 +43,16 @@ namespace snipetrain_bot
             await _client.StartAsync();
 
             await _client.DownloadUsersAsync(_client.Guilds);
-            // Guild = _client.GetGuild(ulong.Parse(_config.GetSection("discord")["guildId"]));
 
+	        Console.WriteLine("[ OK ] SnipeBot Connected!");
 
             await Task.Delay(-1);
+        }
+
+        public async Task StopClient()
+        {
+            await _client.StopAsync();
+            await _client.LogoutAsync();
         }
 
         public async Task InstallCommandsAsync()
