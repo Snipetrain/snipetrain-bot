@@ -16,5 +16,7 @@ namespace snipetrain_bot.Models
         public string Reason { get; set; }
         [BsonElement("User")]
         public string User { get; set; }
+        [BsonElement("UserId")]
+        public ulong UserId{ get; set; }
     }
 }

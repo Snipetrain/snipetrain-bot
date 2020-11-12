@@ -11,7 +11,7 @@ namespace snipetrain_bot.Services
         Task AddBanAsync(PermissionSchema model);
         Task AddWarnAsync(PermissionSchema model);
         Task<List<PermissionSchema>> GetDocsAsync();
-        Task<PermissionSchema> GetDocsAsync(IGuildUser user);
+        Task<long> GetDocsAsync(IGuildUser user);
 
     }
 }

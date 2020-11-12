@@ -29,19 +29,20 @@ namespace snipetrain_bot.Modules
                 var adminName = Context.User.ToString();
                 var date = DateTime.Now.ToString();
                 var kickedUser = user.ToString();
+                var userid = user.Id;
                 var DBinfo = new PermissionSchema
                 {
                     AdminName = adminName,
                     Date = date,
                     Reason = reason,
-                    User = kickedUser
+                    User = kickedUser,
+                    UserId = userid
                 };
                 await _Permservice.AddKickAsync(DBinfo);
             }
             catch (Exception e)
             {
-
-                System.Console.WriteLine(e.ToString());
+                Console.WriteLine(e.ToString());
             }
         }
         [Command("ban")]
@@ -55,19 +56,20 @@ namespace snipetrain_bot.Modules
                 var adminName = Context.User.ToString();
                 var date = DateTime.Now.ToString();
                 var kickedUser = user.ToString();
+                var userid = user.Id;
                 var DBinfo = new PermissionSchema
                 {
                     AdminName = adminName,
                     Date = date,
                     Reason = reason,
-                    User = kickedUser
+                    User = kickedUser,
+                    UserId = userid
                 };
                 await _Permservice.AddBanAsync(DBinfo);
             }
             catch (Exception e)
             {
-
-                System.Console.WriteLine(e.ToString());
+                Console.WriteLine(e.ToString());
             }
         }
         [Command("warn")]
@@ -82,19 +84,32 @@ namespace snipetrain_bot.Modules
                 var adminName = Context.User.ToString();
                 var date = DateTime.Now.ToString();
                 var WarnedUser = user.ToString();
+                var userid = user.Id;
                 var DBinfo = new PermissionSchema
                 {
                     AdminName = adminName,
                     Date = date,
                     Reason = reason,
-                    User = WarnedUser
+                    User = WarnedUser,
+                    UserId = userid
                 };
                 await _Permservice.AddWarnAsync(DBinfo);
                 var docNum = await _Permservice.GetDocsAsync(user);
+                if (docNum == 3)
+                {
+                    await user.KickAsync(reason, null);
+
+                }
+                if (docNum == 5)
+                {
+                    await user.BanAsync(7, reason, null);
+
+                }
 
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.ToString());
             }
         }
     }

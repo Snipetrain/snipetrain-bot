@@ -39,10 +39,9 @@ namespace snipetrain_bot.Services
         {
             return (await _Warn.FindAsync(s => true)).ToList();
         }
-        public async Task<PermissionSchema> GetDocsAsync(IGuildUser user)
+        public async Task<long> GetDocsAsync(IGuildUser user)
         {
-            return await _Warn.CountDocuments(filter: (User: user),options:null,cancellationToken:default);
-
+            return await _Warn.CountDocumentsAsync(x => x.UserId == user.Id);
         }
     }
 }
