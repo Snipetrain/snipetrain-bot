@@ -55,7 +55,7 @@ namespace snipetrain_bot
             _client.ReactionAdded += OnReactionUp;
             _client.ReactionRemoved += OnReactionDown;
             _client.GuildAvailable += OnGuildAvailable;
-
+            
             await _commands.AddModuleAsync<RankModule>(_services);
             await _commands.AddModuleAsync<StreamModule>(_services);
             await _commands.AddModuleAsync<EventModule>(_services);
