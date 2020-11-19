@@ -1,11 +1,7 @@
 using System;
+using System.Timers;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
-using Discord.Net.WebSockets;
-using Discord.WebSocket;
-using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
 using snipetrain_bot.Models;
 using snipetrain_bot.Services;
 
@@ -15,33 +11,50 @@ namespace snipetrain_bot.Modules
     public class EventModule : ModuleBase
     {
         private readonly IEventService _eventservice;
+        System.Timers.Timer t = new System.Timers.Timer();
         public EventModule(IEventService eventService)
         {
             _eventservice = eventService;
-
         }
         [Command("add")]
-        public async Task addEvent(string prize, [Remainder] string message)
+        public async Task addEvent(string prize, int addDaysNum, [Remainder] string message)
         {
             try
             {
                 var user = Context.User.ToString();
-                var time = DateTime.Now.ToString();
+                var eventDay = DateTime.Now.AddDays(addDaysNum).ToShortDateString().ToString();
+                var andate = DateTime.Now.ToString();
+
+                var currentDayInt = DateTime.Now.ToFileTime();
+                var eventDayInt = DateTime.Now.AddDays(addDaysNum).ToFileTime();
+                var timertime = (eventDayInt - currentDayInt) / 10000;
+
                 var events = new EventSchema
                 {
                     Prize = prize,
                     Message = message,
-                    AnDate = time,
-                    Name = user
+                    AnDate = andate,
+                    Name = user,
+                    EventDay = eventDay
                 };
                 await _eventservice.AddEventAsync(events);
+
+                t.Interval = timertime;
+                t.Elapsed += new ElapsedEventHandler(timer_tick);
+                t.Enabled = true;
+
+                void timer_tick(object source, ElapsedEventArgs e)
+                {
+                    ReplyAsync("timer stopped");
+                    t.Enabled = false;
+                }
+
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 await ReplyAsync($"Error trying to add a event :: Check Logs");
             }
-
         }
         [Command("delete")]
         public async Task deletEvent([Remainder] string id)
@@ -59,11 +72,9 @@ namespace snipetrain_bot.Modules
             }
             catch (Exception e)
             {
-
                 System.Console.WriteLine(e.ToString());
                 await ReplyAsync("Error While Trying to Delete the Doc from the DB,Please Check the logs");
             }
         }
-
     }
 }

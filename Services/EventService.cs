@@ -12,7 +12,7 @@ namespace snipetrain_bot.Services
 
         public EventService(IConfiguration configuration)
         {
-            var client = new MongoClient(configuration.GetSection("connectionStrings")["Testevent"]);
+            var client = new MongoClient(configuration.GetSection("connectionStrings")["snipetrain"]);
             var database = client.GetDatabase("SnipeEvent");
 
             _Event = database.GetCollection<EventSchema>("sn_Event");

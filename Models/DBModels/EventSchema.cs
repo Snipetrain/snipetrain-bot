@@ -16,5 +16,7 @@ namespace snipetrain_bot.Models
         public string Prize { get; set; }
         [BsonElement("Message")]
         public string Message { get; set; }
+        [BsonElement("EventDay")]
+        public string EventDay{ get; set; }
     }
 }
