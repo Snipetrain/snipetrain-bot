@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using snipetrain_bot.HostedServices;
 using snipetrain_bot.Services;
 
 namespace snipetrain_bot
@@ -36,11 +37,11 @@ namespace snipetrain_bot
             services.AddScoped<IStreamersService, StreamersService>();
             services.AddScoped<IEventService, EventService>();
 
-
             services.AddSingleton<ITwitchService, TwitchService>();
             services.AddSingleton<IConfiguration>(configuration);
-            
             services.AddSingleton<DiscordRunner>();
+
+            services.AddHostedService<ScheduledEventHostedService>();
 
             return services.BuildServiceProvider();
         }

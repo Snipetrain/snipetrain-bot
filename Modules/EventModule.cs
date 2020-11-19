@@ -39,15 +39,7 @@ namespace snipetrain_bot.Modules
                 };
                 await _eventservice.AddEventAsync(events);
 
-                t.Interval = timertime;
-                t.Elapsed += new ElapsedEventHandler(timer_tick);
-                t.Enabled = true;
-
-                void timer_tick(object source, ElapsedEventArgs e)
-                {
-                    ReplyAsync("timer stopped");
-                    t.Enabled = false;
-                }
+                // TODO: ADD TO EVENT LIST
 
             }
             catch (Exception e)
