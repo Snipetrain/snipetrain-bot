@@ -1,5 +1,4 @@
 using System;
-using System.Timers;
 using System.Threading.Tasks;
 using Discord.Commands;
 using snipetrain_bot.Models;
