@@ -9,7 +9,6 @@ namespace snipetrain_bot
 {
     class Program
     {
-
         static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
@@ -23,13 +22,13 @@ namespace snipetrain_bot
             var servicesProvider = BuildDi(configuration);
 
             var runner = servicesProvider.GetRequiredService<DiscordRunner>();
-            await runner.StartClient(servicesProvider, configuration);
+            await runner.StartClient(servicesProvider);
 
             Console.WriteLine("Press ANY key to exit");
             Console.ReadLine();
         }
 
-        private static IServiceProvider BuildDi(IConfiguration configuration)
+        private IServiceProvider BuildDi(IConfiguration configuration)
         {
             var services = new ServiceCollection();
 
@@ -40,8 +39,8 @@ namespace snipetrain_bot
 
             services.AddSingleton<ITwitchService, TwitchService>();
             services.AddSingleton<IConfiguration>(configuration);
-
-            services.AddTransient<DiscordRunner>();
+            
+            services.AddSingleton<DiscordRunner>();
 
             return services.BuildServiceProvider();
         }

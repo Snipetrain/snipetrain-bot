@@ -8,5 +8,8 @@ namespace snipetrain_bot.Services
     {
         Task<TwitchUser> GetTwitchUser(string twitchUser);
         Task AuthenticateTwitch();
+        void AddTwitchSubscription(string twitchUsername, string twitchUserId);
+        void RemoveTwitchSubscription(string twitchUsername);
+        Task AddAllTwitchSubscriptions();
     }
 }
