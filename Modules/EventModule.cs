@@ -21,12 +21,8 @@ namespace snipetrain_bot.Modules
             try
             {
                 var user = Context.User.ToString();
-                var eventDay = DateTime.Now.AddDays(addDaysNum).ToShortDateString().ToString();
+                var eventDay = DateTime.Now.AddDays(addDaysNum);
                 var andate = DateTime.Now.ToString();
-
-                var currentDayInt = DateTime.Now.ToFileTime();
-                var eventDayInt = DateTime.Now.AddDays(addDaysNum).ToFileTime();
-                var timertime = (eventDayInt - currentDayInt) / 10000;
 
                 var events = new EventSchema
                 {
@@ -38,7 +34,7 @@ namespace snipetrain_bot.Modules
                 };
                 await _eventservice.AddEventAsync(events);
 
-                // TODO: ADD TO EVENT LIST
+                _eventservice.AddEventToList(eventDay);
 
             }
             catch (Exception e)

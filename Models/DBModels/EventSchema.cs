@@ -1,10 +1,13 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace snipetrain_bot.Models
 {
     public class EventSchema
     {
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
@@ -17,6 +20,7 @@ namespace snipetrain_bot.Models
         [BsonElement("Message")]
         public string Message { get; set; }
         [BsonElement("EventDay")]
-        public string EventDay{ get; set; }
+        public DateTime EventDay { get; set; }
+
     }
 }

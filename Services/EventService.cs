@@ -1,14 +1,19 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using snipetrain_bot.Models;
+using snipetrain_bot.Events;
 
 namespace snipetrain_bot.Services
 {
     public class EventService : IEventService
     {
         private readonly IMongoCollection<EventSchema> _Event;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IConfiguration _config;
+        private List<EventsList> Events = new List<EventsList>(); 
 
         public EventService(IConfiguration configuration)
         {
@@ -33,6 +38,10 @@ namespace snipetrain_bot.Services
         {
             await _Event.DeleteOneAsync(s => s.Id == id);
         }
-        
+        public void AddEventToList(DateTime eventDay)
+        {
+            var runner = _serviceProvider.GetService(typeof(DiscordRunner)) as DiscordRunner;
+            Events.Add(new EventsList(runner, _config,eventDay)); 
+        }
     }
 }

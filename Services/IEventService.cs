@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using snipetrain_bot.Models;
@@ -10,6 +11,7 @@ namespace snipetrain_bot.Services
         Task<EventSchema> GetDocAsync(string id);
         Task DeleteDocAsync(string id);
         Task AddEventAsync(EventSchema model);
+        void AddEventToList(DateTime date);
     }
    
 }

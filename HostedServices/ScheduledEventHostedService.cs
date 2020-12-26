@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using snipetrain_bot.Models;
+using snipetrain_bot.Events;
+using Microsoft.Extensions.Logging;
 
 namespace snipetrain_bot.HostedServices
 {
@@ -11,11 +13,14 @@ namespace snipetrain_bot.HostedServices
     {
 
         private Timer _timer;
-        private List<EventSchema> list = new List<EventSchema>();
+        private List<EventsList> Events = new List<EventsList>();
+        private readonly ILogger<ScheduledEventHostedService> _logger;
+        private readonly DateTime _date;
 
-        public DataUpdateHostedService()
+        public DataUpdateHostedService(Timer timer,DateTime date)
         {
-            
+            _timer = timer;
+            _date = date;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -29,7 +34,7 @@ namespace snipetrain_bot.HostedServices
 
         private async void DoWork(object state)
         {
-            // DO STUFF EVERY 60 SECONDS
+            
         }
 
         public Task StopAsync(CancellationToken stoppingToken)
