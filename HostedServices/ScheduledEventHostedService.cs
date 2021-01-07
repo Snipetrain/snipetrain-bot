@@ -6,21 +6,21 @@ using Microsoft.Extensions.Hosting;
 using snipetrain_bot.Models;
 using snipetrain_bot.Events;
 using Microsoft.Extensions.Logging;
+using snipetrain_bot.Services;
 
 namespace snipetrain_bot.HostedServices
 {
-    public class ScheduledEventHostedService : IHostedService, IDisposable
+    public class ScheduledPartyHostedService : IHostedService, IDisposable
     {
 
         private Timer _timer;
-        private List<EventsList> Events = new List<EventsList>();
-        private readonly ILogger<ScheduledEventHostedService> _logger;
-        private readonly DateTime _date;
+        private readonly ILogger<ScheduledPartyHostedService> _logger;
+        private readonly IPartyService _partyService;
 
-        public DataUpdateHostedService(Timer timer,DateTime date)
+    
+        public ScheduledPartyHostedService(IPartyService partyService)
         {
-            _timer = timer;
-            _date = date;
+            _partyService = partyService;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -34,8 +34,23 @@ namespace snipetrain_bot.HostedServices
 
         private async void DoWork(object state)
         {
-            
+            try
+            {
+                var partyList = await _partyService.GetPartiesAsync();
+
+                foreach (var party in partyList)
+                {
+                    Console.WriteLine($"party = {party.Name}");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
         }
+
 
         public Task StopAsync(CancellationToken stoppingToken)
         {

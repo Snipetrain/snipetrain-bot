@@ -35,13 +35,13 @@ namespace snipetrain_bot
 
             services.AddScoped<ISnipetrainService, SnipetrainService>();
             services.AddScoped<IStreamersService, StreamersService>();
-            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IPartyService, PartyService>();
 
             services.AddSingleton<ITwitchService, TwitchService>();
             services.AddSingleton<IConfiguration>(configuration);
             services.AddSingleton<DiscordRunner>();
 
-            services.AddHostedService<ScheduledEventHostedService>();
+            services.AddHostedService<ScheduledPartyHostedService>();
 
             return services.BuildServiceProvider();
         }

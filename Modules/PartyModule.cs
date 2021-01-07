@@ -6,25 +6,25 @@ using snipetrain_bot.Services;
 
 namespace snipetrain_bot.Modules
 {
-    [Group("event")]
+    [Group("party")]
     public class EventModule : ModuleBase
     {
-        private readonly IEventService _eventservice;
+        private readonly IPartyService _partyService;
         System.Timers.Timer t = new System.Timers.Timer();
-        public EventModule(IEventService eventService)
+        public EventModule(IPartyService partyService)
         {
-            _eventservice = eventService;
+            _partyService = partyService;
         }
         [Command("add")]
-        public async Task addEvent(string prize, int addDaysNum, [Remainder] string message)
+        public async Task addParty(string prize, int addDaysNum, [Remainder] string message)
         {
             try
             {
                 var user = Context.User.ToString();
                 var eventDay = DateTime.Now.AddDays(addDaysNum);
-                var andate = DateTime.Now.ToString();
+                var andate = DateTime.Now;
 
-                var events = new EventSchema
+                var party = new PartySchema
                 {
                     Prize = prize,
                     Message = message,
@@ -32,9 +32,8 @@ namespace snipetrain_bot.Modules
                     Name = user,
                     EventDay = eventDay
                 };
-                await _eventservice.AddEventAsync(events);
 
-                _eventservice.AddEventToList(eventDay);
+                await _partyService.AddPartyAsync(party); // Adds Party to DB
 
             }
             catch (Exception e)
@@ -44,18 +43,19 @@ namespace snipetrain_bot.Modules
             }
         }
         [Command("delete")]
-        public async Task deletEvent([Remainder] string id)
+        public async Task deleteParty([Remainder] string id)
         {
             try
             {
-                var docid = await _eventservice.GetDocAsync(id);
+                var party = await _partyService.GetPartyAsync(id);
 
-                if (docid == null)
-                    await ReplyAsync("Event Doesnt Exist in the DB");
+                if (party == null)
+                    await ReplyAsync("Party Doesnt Exist in the DB");
 
-                await _eventservice.DeleteDocAsync(id);
+                
+                await _partyService.RemovePartyAsync(id);
 
-                await ReplyAsync("Deleted the Doc from thr DB");
+                await ReplyAsync("Deleted Party from thr DB");
             }
             catch (Exception e)
             {

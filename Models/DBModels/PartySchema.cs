@@ -5,7 +5,7 @@ using System;
 
 namespace snipetrain_bot.Models
 {
-    public class EventSchema
+    public class PartySchema
     {
 
         [BsonId]
@@ -14,7 +14,7 @@ namespace snipetrain_bot.Models
         [BsonElement("admin_name")]
         public string Name { get; set; }
         [BsonElement("AnDate")]
-        public string AnDate { get; set; }
+        public DateTime AnDate { get; set; }
         [BsonElement("Prize")]
         public string Prize { get; set; }
         [BsonElement("Message")]
