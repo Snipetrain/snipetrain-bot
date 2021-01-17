@@ -16,16 +16,17 @@ namespace snipetrain_bot.HostedServices
         private Timer _timer;
         private readonly ILogger<ScheduledPartyHostedService> _logger;
         private readonly IPartyService _partyService;
+        private readonly DiscordRunner _runner;
 
-    
-        public ScheduledPartyHostedService(IPartyService partyService)
+        public ScheduledPartyHostedService(IPartyService partyService, DiscordRunner runner)
         {
             _partyService = partyService;
+            _runner = runner;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
-            
+
             var seconds = 60;
             _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(seconds));
 
@@ -34,23 +35,29 @@ namespace snipetrain_bot.HostedServices
 
         private async void DoWork(object state)
         {
-            try
-            {
-                var partyList = await _partyService.GetPartiesAsync();
+            var partyList = await _partyService.GetPartiesAsync();
+            var ChannelNA = ulong.Parse("700712690288427129");
+            var ChannelEU = ulong.Parse("747139803711012884");
+            var roleId = "272275923208896512";
 
-                foreach (var party in partyList)
-                {
-                    Console.WriteLine($"party = {party.Name}");
-                }
-
-            }
-            catch (Exception ex)
+            foreach (var party in partyList)
             {
-                
-                throw;
+                var DateCompVal = party.EventDay.CompareTo(DateTime.Now);
+
+                    if (DateCompVal <= 0)
+                    {
+                        if (party.Region == "NA")
+                        {
+                            await _runner.SendMessage($"<@&{roleId}>  an NA Event is Starting Right Now", ChannelNA);
+                        }
+                        if (party.Region == "EU")
+                        {
+                            await _runner.SendMessage($"<@&{roleId}>  an EU Event is Starting Right Now", ChannelEU);
+                        }
+                    }
             }
+
         }
-
 
         public Task StopAsync(CancellationToken stoppingToken)
         {

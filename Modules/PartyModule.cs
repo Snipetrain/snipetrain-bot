@@ -16,7 +16,7 @@ namespace snipetrain_bot.Modules
             _partyService = partyService;
         }
         [Command("add")]
-        public async Task addParty(string prize, int addDaysNum, [Remainder] string message)
+        public async Task addParty(string prize,string region, int addDaysNum, [Remainder] string message)
         {
             try
             {
@@ -30,7 +30,8 @@ namespace snipetrain_bot.Modules
                     Message = message,
                     AnDate = andate,
                     Name = user,
-                    EventDay = eventDay
+                    EventDay = eventDay,
+                    Region = region
                 };
 
                 await _partyService.AddPartyAsync(party); // Adds Party to DB

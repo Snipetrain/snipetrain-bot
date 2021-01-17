@@ -21,6 +21,8 @@ namespace snipetrain_bot.Models
         public string Message { get; set; }
         [BsonElement("EventDay")]
         public DateTime EventDay { get; set; }
+        [BsonElement("Region")]
+        public string Region { get; set; }
 
     }
 }
