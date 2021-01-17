@@ -44,19 +44,23 @@ namespace snipetrain_bot.HostedServices
             {
                 var DateCompVal = party.EventDay.CompareTo(DateTime.Now);
 
-                    if (DateCompVal <= 0)
+                if (DateCompVal <= 0)
+                {
+                    if (party.Region == "NA")
                     {
-                        if (party.Region == "NA")
-                        {
-                            await _runner.SendMessage($"<@&{roleId}>  an NA Event is Starting Right Now", ChannelNA);
-                        }
-                        if (party.Region == "EU")
-                        {
-                            await _runner.SendMessage($"<@&{roleId}>  an EU Event is Starting Right Now", ChannelEU);
-                        }
+                        await _runner.SendMessage($"<@&{roleId}>  an NA Event is Starting Right Now", ChannelNA);
                     }
+                    if (party.Region == "EU")
+                    {
+                        await _runner.SendMessage($"<@&{roleId}>  an EU Event is Starting Right Now", ChannelEU);
+                    }
+                    partyList.Remove(party);
+                }
+                else
+                {
+                    return;
+                }
             }
-
         }
 
         public Task StopAsync(CancellationToken stoppingToken)
