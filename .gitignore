@@ -46,6 +46,7 @@ out/
 *.log
 *.svclog
 *.scc
+*.local.json
 
 # Visual C++ cache files
 ipch/
