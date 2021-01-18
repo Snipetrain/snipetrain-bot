@@ -41,6 +41,7 @@ namespace snipetrain_bot
                 services.AddScoped<ISnipetrainService, SnipetrainService>();
                 services.AddScoped<IStreamersService, StreamersService>();
                 services.AddScoped<IPartyService, PartyService>();
+                services.AddScoped<IPermService, PermService>();
 
                 services.AddSingleton<ITwitchService, TwitchService>();
                 services.AddSingleton<IConfiguration>(configuration);

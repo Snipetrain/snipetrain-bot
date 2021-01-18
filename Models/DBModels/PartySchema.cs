@@ -1,6 +1,5 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Microsoft.Extensions.Configuration;
 using System;
 
 namespace snipetrain_bot.Models

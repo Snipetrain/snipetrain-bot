@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using snipetrain_bot.Models;
-using snipetrain_bot.Events;
 
 namespace snipetrain_bot.Services
 {

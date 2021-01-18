@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using snipetrain_bot.Models;
-using snipetrain_bot.Events;
 using Microsoft.Extensions.Logging;
 using snipetrain_bot.Services;
 
@@ -39,6 +36,7 @@ namespace snipetrain_bot.HostedServices
             var ChannelNA = ulong.Parse("700712690288427129");
             var ChannelEU = ulong.Parse("747139803711012884");
             var roleId = "272275923208896512";
+            
 
             foreach (var party in partyList)
             {
@@ -48,13 +46,13 @@ namespace snipetrain_bot.HostedServices
                 {
                     if (party.Region == "NA")
                     {
-                        await _runner.SendMessage($"<@&{roleId}>  an NA Event is Starting Right Now", ChannelNA);
+                        await _runner.SendMessage($"<@&{roleId}>  an NA Event is Starting Right Now", ChannelNA);   
                     }
                     if (party.Region == "EU")
                     {
                         await _runner.SendMessage($"<@&{roleId}>  an EU Event is Starting Right Now", ChannelEU);
                     }
-                    partyList.Remove(party);
+                    await _partyService.RemovePartyAsync(party.Id);
                 }
                 else
                 {
@@ -63,7 +61,7 @@ namespace snipetrain_bot.HostedServices
             }
         }
 
-        public Task StopAsync(CancellationToken stoppingToken)
+        public  Task StopAsync(CancellationToken stoppingToken)
         {
 
             _timer?.Change(Timeout.Infinite, 0);
