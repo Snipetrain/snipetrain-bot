@@ -21,7 +21,7 @@ namespace snipetrain_bot.Modules
             try
             {
                 var user = Context.User.ToString();
-                var eventDay = DateTime.Now.AddSeconds(addDaysNum);
+                var eventDay = DateTime.Now.AddDays(addDaysNum);
                 var andate = DateTime.Now;
 
                 var party = new PartySchema
