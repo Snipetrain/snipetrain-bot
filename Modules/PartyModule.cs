@@ -54,14 +54,14 @@ namespace snipetrain_bot.Modules
                 var party = await _partyService.GetPartyAsync(id);
 
                 if (party == null)
-                    throw new DocDoesntExist("Doc doesn't exist in DB!");
+                    throw new DocDoesntExistException("Doc doesn't exist in DB!");
 
 
                 await _partyService.RemovePartyAsync(id);
 
                 await ReplyAsync("Deleted Party from thr DB");
             }
-            catch(DocDoesntExist e)
+            catch(DocDoesntExistException e)
             {
                 await ReplyAsync(e.Message);
             }

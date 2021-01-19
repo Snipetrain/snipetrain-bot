@@ -29,7 +29,7 @@ namespace snipetrain_bot.Modules
 
                 if (user == null)
                 {
-                    throw new UserNotFound($"Couldn't Find {user}");
+                    throw new UserNotFoundException($"Couldn't Find {user}");
                 }
 
                 var DBinfo = new PermissionSchema
@@ -43,7 +43,7 @@ namespace snipetrain_bot.Modules
                 await user.KickAsync(reason);
                 await _Permservice.AddKickAsync(DBinfo);
             }
-            catch(UserNotFound e)
+            catch(UserNotFoundException e)
             {
                 await ReplyAsync(e.Message);
             }
@@ -67,7 +67,7 @@ namespace snipetrain_bot.Modules
 
                  if (user == null)
                 {
-                    throw new UserNotFound($"Couldn't Find {user}");
+                    throw new UserNotFoundException($"Couldn't Find {user}");
                 }
 
                 var DBinfo = new PermissionSchema
@@ -82,7 +82,7 @@ namespace snipetrain_bot.Modules
                 await user.BanAsync(7, reason, null);
                 await _Permservice.AddBanAsync(DBinfo);
             }
-            catch(UserNotFound e)
+            catch(UserNotFoundException e)
             {
                 await ReplyAsync(e.Message);
             }
@@ -108,7 +108,7 @@ namespace snipetrain_bot.Modules
 
                  if (user == null)
                 {
-                    throw new UserNotFound($"Couldn't Find {user}");
+                    throw new UserNotFoundException($"Couldn't Find {user}");
                 }
 
                 var DBinfo = new PermissionSchema
@@ -133,7 +133,7 @@ namespace snipetrain_bot.Modules
 
                 }
             }
-            catch(UserNotFound e)
+            catch(UserNotFoundException e)
             {
                 await ReplyAsync(e.Message);
             }
