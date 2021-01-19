@@ -7,7 +7,9 @@
             "stream": "mm"
         },
         "channels": {
-            "stream-announcement": 774057035012505630
+            "stream-announcement": 774057035012505630,
+            "snipetrain-tf2-us": 751102535091093580,
+            "snipetrain-tf2-eu": 751102593769537627
         },
         "messages": {
             "streamReaction": 774728592851599393
@@ -16,6 +18,9 @@
             "stream": {
                 "id": "774722305506672680",
                 "name": "StreamWatchers"
+            },
+            "event_mention" : {
+                "id": "553970720812695592"
             }
         }
     },

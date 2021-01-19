@@ -13,13 +13,13 @@ namespace snipetrain_bot.Models
         [BsonElement("admin_name")]
         public string Name { get; set; }
         [BsonElement("AnDate")]
-        public DateTime AnDate { get; set; }
+        public DateTimeOffset AnDate { get; set; }
         [BsonElement("Prize")]
         public string Prize { get; set; }
         [BsonElement("Message")]
         public string Message { get; set; }
         [BsonElement("EventDay")]
-        public DateTime EventDay { get; set; }
+        public DateTimeOffset EventDay { get; set; }
         [BsonElement("Region")]
         public string Region { get; set; }
 

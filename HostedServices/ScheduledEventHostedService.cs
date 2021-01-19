@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using snipetrain_bot.Services;
@@ -14,11 +15,13 @@ namespace snipetrain_bot.HostedServices
         private readonly ILogger<ScheduledPartyHostedService> _logger;
         private readonly IPartyService _partyService;
         private readonly DiscordRunner _runner;
+        private readonly IConfiguration _config;
 
-        public ScheduledPartyHostedService(IPartyService partyService, DiscordRunner runner)
+        public ScheduledPartyHostedService(IPartyService partyService, DiscordRunner runner,IConfiguration config)
         {
             _partyService = partyService;
             _runner = runner;
+            _config = config;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -32,36 +35,39 @@ namespace snipetrain_bot.HostedServices
 
         private async void DoWork(object state)
         {
-            var partyList = await _partyService.GetPartiesAsync();
-            var ChannelNA = ulong.Parse("700712690288427129");
-            var ChannelEU = ulong.Parse("747139803711012884");
-            var roleId = "272275923208896512";
-            
-
-            foreach (var party in partyList)
+            try
             {
-                var DateCompVal = party.EventDay.CompareTo(DateTime.Now);
+                var partyList = await _partyService.GetPartiesAsync();
+                var ChannelNA = ulong.Parse(_config.GetSection("channels")["snipetrain-tf2-us"]);
+                var ChannelEU = ulong.Parse(_config.GetSection("channels")["snipetrain-tf2-eu"]);
+                var roleId = _config.GetSection("roles").GetSection("event_mention")["id"];
 
-                if (DateCompVal <= 0)
+                foreach (var party in partyList)
                 {
-                    if (party.Region == "NA")
+                    var DateCompVal = party.EventDay.CompareTo(DateTimeOffset.Now);
+
+                    if (DateCompVal <= 0)
                     {
-                        await _runner.SendMessage($"<@&{roleId}>  an NA Event is Starting Right Now", ChannelNA);   
+                        if (party.Region == "NA")
+                        {
+                            await _runner.SendMessage($"<@&{roleId}>  an NA Event is Starting Right Now", ChannelNA);
+                        }
+                        if (party.Region == "EU")
+                        {
+                            await _runner.SendMessage($"<@&{roleId}>  an EU Event is Starting Right Now", ChannelEU);
+                        }
+                        await _partyService.RemovePartyAsync(party.Id);
                     }
-                    if (party.Region == "EU")
-                    {
-                        await _runner.SendMessage($"<@&{roleId}>  an EU Event is Starting Right Now", ChannelEU);
-                    }
-                    await _partyService.RemovePartyAsync(party.Id);
                 }
-                else
-                {
-                    return;
-                }
+            }
+            catch (System.Exception e)
+            {
+
+                Console.WriteLine(e.ToString());
             }
         }
 
-        public  Task StopAsync(CancellationToken stoppingToken)
+        public Task StopAsync(CancellationToken stoppingToken)
         {
 
             _timer?.Change(Timeout.Infinite, 0);

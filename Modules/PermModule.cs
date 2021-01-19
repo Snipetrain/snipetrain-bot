@@ -4,7 +4,6 @@ using Discord.Commands;
 using snipetrain_bot.Models;
 using snipetrain_bot.Services;
 using Discord;
-using MongoDB.Driver;
 
 namespace snipetrain_bot.Modules
 {
@@ -23,14 +22,19 @@ namespace snipetrain_bot.Modules
         {
             try
             {
-                var adminName = Context.User.ToString();
-                var date = DateTime.Now;
+                var admin = Context.User.ToString();
+                var date = DateTimeOffset.Now;
                 var kickedUser = user.ToString();
                 var userid = user.Id;
 
+                if (user == null)
+                {
+                    throw new UserNotFound($"Couldn't Find {user}");
+                }
+
                 var DBinfo = new PermissionSchema
                 {
-                    AdminName = adminName,
+                    AdminName = admin,
                     Date = date,
                     Reason = reason,
                     User = kickedUser,
@@ -39,8 +43,13 @@ namespace snipetrain_bot.Modules
                 await user.KickAsync(reason);
                 await _Permservice.AddKickAsync(DBinfo);
             }
+            catch(UserNotFound e)
+            {
+                await ReplyAsync(e.Message);
+            }
             catch (Exception e)
             {
+                await ReplyAsync($"Error While Trying to Kick {user}");
                 Console.WriteLine(e.ToString());
             }
         }
@@ -52,9 +61,14 @@ namespace snipetrain_bot.Modules
             try
             {
                 var adminName = Context.User.ToString();
-                var date = DateTime.Now;
+                var date = DateTimeOffset.Now;
                 var kickedUser = user.ToString();
                 var userid = user.Id;
+
+                 if (user == null)
+                {
+                    throw new UserNotFound($"Couldn't Find {user}");
+                }
 
                 var DBinfo = new PermissionSchema
                 {
@@ -68,8 +82,13 @@ namespace snipetrain_bot.Modules
                 await user.BanAsync(7, reason, null);
                 await _Permservice.AddBanAsync(DBinfo);
             }
+            catch(UserNotFound e)
+            {
+                await ReplyAsync(e.Message);
+            }
             catch (Exception e)
             {
+                await ReplyAsync($"Error While Trying to Ban {user}");
                 Console.WriteLine(e.ToString());
             }
         }
@@ -83,9 +102,14 @@ namespace snipetrain_bot.Modules
             try
             {
                 var adminName = Context.User.ToString();
-                var date = DateTime.Now;
+                var date = DateTimeOffset.Now;
                 var WarnedUser = user.ToString();
                 var userid = user.Id;
+
+                 if (user == null)
+                {
+                    throw new UserNotFound($"Couldn't Find {user}");
+                }
 
                 var DBinfo = new PermissionSchema
                 {
@@ -109,8 +133,13 @@ namespace snipetrain_bot.Modules
 
                 }
             }
+            catch(UserNotFound e)
+            {
+                await ReplyAsync(e.Message);
+            }
             catch (Exception e)
             {
+                await ReplyAsync($"Error While Trying to Warn {user}");
                 Console.WriteLine(e.ToString());
             }
         }

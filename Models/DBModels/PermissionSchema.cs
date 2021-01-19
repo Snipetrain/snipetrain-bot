@@ -12,7 +12,7 @@ namespace snipetrain_bot.Models
         [BsonElement("Admin")]
         public string AdminName { get; set; }
         [BsonElement("Date")]
-        public DateTime Date { get; set; }
+        public DateTimeOffset Date { get; set; }
         [BsonElement("Reason")]
         public string Reason { get; set; }
         [BsonElement("User")]
