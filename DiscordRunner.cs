@@ -58,7 +58,7 @@ namespace snipetrain_bot
             
             await _commands.AddModuleAsync<RankModule>(_services);
             await _commands.AddModuleAsync<StreamModule>(_services);
-            await _commands.AddModuleAsync<EventModule>(_services);
+            await _commands.AddModuleAsync<PartyModule>(_services);
             await _commands.AddModuleAsync<PermModule>(_services);
             
         }

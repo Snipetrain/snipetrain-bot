@@ -8,11 +8,10 @@ using Discord;
 namespace snipetrain_bot.Modules
 {
     [Group("party")]
-    public class EventModule : ModuleBase
+    public class PartyModule : ModuleBase
     {
         private readonly IPartyService _partyService;
-        System.Timers.Timer t = new System.Timers.Timer();
-        public EventModule(IPartyService partyService)
+        public PartyModule(IPartyService partyService)
         {
             _partyService = partyService;
         }
