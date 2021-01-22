@@ -55,9 +55,12 @@ namespace snipetrain_bot
             _client.ReactionAdded += OnReactionUp;
             _client.ReactionRemoved += OnReactionDown;
             _client.GuildAvailable += OnGuildAvailable;
-
+            
             await _commands.AddModuleAsync<RankModule>(_services);
             await _commands.AddModuleAsync<StreamModule>(_services);
+            await _commands.AddModuleAsync<PartyModule>(_services);
+            await _commands.AddModuleAsync<PermModule>(_services);
+            
         }
 
         public async Task OnGuildAvailable(SocketGuild guild)
@@ -137,6 +140,7 @@ namespace snipetrain_bot
 
         public async Task HandleCommand(SocketMessage messageParam)
         {
+            
             var message = messageParam as SocketUserMessage;
             if (message == null) return;
 

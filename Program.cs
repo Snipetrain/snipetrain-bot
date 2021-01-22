@@ -3,6 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using snipetrain_bot.HostedServices;
 using snipetrain_bot.Services;
 
 namespace snipetrain_bot
@@ -10,38 +12,42 @@ namespace snipetrain_bot
     class Program
     {
         static void Main(string[] args)
-            => new Program().MainAsync().GetAwaiter().GetResult();
-
-        public async Task MainAsync()
         {
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("config.json")
                 .Build();
 
-            var servicesProvider = BuildDi(configuration);
+            var host = CreateHostBuilder(args, configuration).Build();
+            new Program().MainAsync(host).GetAwaiter().GetResult();
+        }
 
-            var runner = servicesProvider.GetRequiredService<DiscordRunner>();
-            await runner.StartClient(servicesProvider);
+
+        public async Task MainAsync(IHost host)
+        {
+            var runner = host.Services.GetRequiredService<DiscordRunner>();
+
+            await host.StartAsync();
+            await runner.StartClient(host.Services);
 
             Console.WriteLine("Press ANY key to exit");
             Console.ReadLine();
         }
 
-        private IServiceProvider BuildDi(IConfiguration configuration)
-        {
-            var services = new ServiceCollection();
+        public static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddScoped<ISnipetrainService, SnipetrainService>();
+                services.AddScoped<IStreamersService, StreamersService>();
+                services.AddScoped<IPartyService, PartyService>();
+                services.AddScoped<IPermService, PermService>();
 
-            services.AddScoped<ISnipetrainService, SnipetrainService>();
-            services.AddScoped<IStreamersService, StreamersService>();
+                services.AddSingleton<ITwitchService, TwitchService>();
+                services.AddSingleton<IConfiguration>(configuration);
+                services.AddSingleton<DiscordRunner>();
 
-            services.AddSingleton<ITwitchService, TwitchService>();
-            services.AddSingleton<IConfiguration>(configuration);
-            
-            services.AddSingleton<DiscordRunner>();
-
-            return services.BuildServiceProvider();
-        }
-        
+                services.AddHostedService<ScheduledPartyHostedService>();
+            });
     }
 }
