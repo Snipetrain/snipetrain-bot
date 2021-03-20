@@ -24,6 +24,10 @@ namespace snipetrain_bot.Services
         {
             return (await _parties.FindAsync(s => true)).ToList();
         }
+        public async Task<List<PartySchema>> GetDailyPartiesAsync()
+        {
+            return (await _parties.FindAsync(s => DateTimeOffset.Now - s.CreatedDate < TimeSpan.FromDays(1))).ToList();
+        }
         public async Task<PartySchema> GetPartyAsync(string id)
         {
             return await (await _parties.FindAsync(s => s.Id == id)).FirstOrDefaultAsync();
