@@ -10,18 +10,23 @@ namespace snipetrain_bot.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        [BsonElement("admin_name")]
-        public string Name { get; set; }
-        [BsonElement("AnDate")]
-        public DateTimeOffset AnDate { get; set; }
-        [BsonElement("Prize")]
-        public string Prize { get; set; }
-        [BsonElement("Message")]
-        public string Message { get; set; }
-        [BsonElement("EventDay")]
-        public DateTimeOffset EventDay { get; set; }
+        [BsonElement("CreatedDate")]
+        public DateTimeOffset CreatedDate { get; set; }
+        [BsonElement("CreatedDate")]
+        public DateTimeOffset ExpiryDate { get; set; }
+        [BsonElement("InitiatedBy")]
+        public string InitiatedBy { get; set; }
         [BsonElement("Region")]
         public string Region { get; set; }
+        [BsonElement("State")]
+        public PartyState State { get; set; }
+    }
 
+
+    public enum PartyState
+    {
+        INACTIVE = 0,
+        VOTING = 1,
+        COMPLETED = 2
     }
 }
