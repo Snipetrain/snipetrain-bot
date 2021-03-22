@@ -28,9 +28,9 @@ namespace snipetrain_bot.Modules
 
                 var dailies = await _partyService.GetDailyPartiesAsync();
 
-                if (dailies.Count < 2) throw new PartyException("There has been already 2 events today! Try again tomorrow.");
+                if (dailies.Count >= 2) throw new PartyException("There has been already 2 events today! Try again tomorrow.");
   
-                if (!dailies.Any(x => x.State == PartyState.VOTING)) throw new PartyException("There is already a vote going on right now!");
+                if (dailies.Any(x => x.State == PartyState.VOTING)) throw new PartyException("There is already a vote going on right now!");
 
                 // TODO here:
                 // Send message or embed to Appropriate channel, e.g. EU = #snipetrain-tf2-eu
