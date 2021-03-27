@@ -12,7 +12,7 @@ namespace snipetrain_bot.Models
         public string Id { get; set; }
         [BsonElement("CreatedDate")]
         public DateTimeOffset CreatedDate { get; set; }
-        [BsonElement("CreatedDate")]
+        [BsonElement("ExpiryDate")]
         public DateTimeOffset ExpiryDate { get; set; }
         [BsonElement("InitiatedBy")]
         public string InitiatedBy { get; set; }
@@ -20,6 +20,8 @@ namespace snipetrain_bot.Models
         public string Region { get; set; }
         [BsonElement("State")]
         public PartyState State { get; set; }
+        [BsonElement("MessageId")]
+        public ulong MessageId { get; set; }
     }
 
 

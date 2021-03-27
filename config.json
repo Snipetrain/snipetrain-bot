@@ -4,7 +4,8 @@
         "token": "",
         "guildId": 771142492032598016,
         "emotes": {
-            "stream": "mm"
+            "stream": "mm",
+            "vote":"white_check_mark"
         },
         "channels": {
             "stream-announcement": 774057035012505630,

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Discord;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using snipetrain_bot.Models;
-
+using Discord.WebSocket;
 namespace snipetrain_bot.Services
 {
     public class PartyService : IPartyService
@@ -39,6 +40,14 @@ namespace snipetrain_bot.Services
         public async Task RemovePartyAsync(string id)
         {
             await _parties.DeleteOneAsync(s => s.Id == id);
+        }
+        public async Task<PartySchema> GetVotingPartyAsync()
+        {
+            return await (await _parties.FindAsync(s => s.State == PartyState.VOTING)).FirstOrDefaultAsync();
+        }
+        public async Task UpdatePartyStateAsync(PartySchema party, PartyState PartyState)
+        {
+            party.State = PartyState;
         }
     }
 }
