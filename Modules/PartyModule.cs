@@ -14,7 +14,6 @@ namespace snipetrain_bot.Modules
     {
         private readonly IPartyService _partyService;
         private readonly DiscordRunner _runner;
-        private IConfiguration _config;
         public PartyModule(IPartyService partyService, DiscordRunner runner)
         {
             _partyService = partyService;
@@ -27,49 +26,49 @@ namespace snipetrain_bot.Modules
             try
             {
                 var dailies = await _partyService.GetDailyPartiesAsync();
-
-                if (region != "EU" || region != "US") throw new PartyException("Usage: !event <NA|EU>");
                 if (region == "EU")
                 {
-                    if (dailies.Any(x => x.State == PartyState.VOTING)) throw new PartyException("There is already a vote going on right now!");
+                    if (dailies.Any(x => x.State == PartyState.Voting)) throw new PartyException("There is already a vote going on right now!");
                     if (dailies.Count >= 2) throw new PartyException("There has been already 2 events today! Try again tomorrow.");
-
+                    
                     var msg = await _runner.SendMessage("Do you Want a SvS Match Right Now ?", 747139803711012884);
-                    var emote = Emote.Parse(_config.GetSection("discord").GetSection("emotes")["vote"]);
-                    var datetime = DateTimeOffset.Now;
-                    await msg.AddReactionAsync(emote, null);
-
+                    var emoji = new Emoji("\uD83D\uDC94");
+                    var datetime = DateTime.UtcNow;
+                    await msg.AddReactionAsync(emoji, null);
+                    
                     await _partyService.AddPartyAsync(new PartySchema
                     {
                         CreatedDate = datetime,
                         InitiatedBy = Context.User.Username,
                         Region = region,
-                        State = PartyState.VOTING,
-                        ExpiryDate = DateTimeOffset.Now + TimeSpan.FromMinutes(30),
+                        State = PartyState.Voting,
+                        ExpiryDate = DateTime.UtcNow + TimeSpan.FromMinutes(30),
                         MessageId = msg.Id
                     });
-
+                    
                 }
                 else if (region == "US")
                 {
-                    if (dailies.Any(x => x.State == PartyState.VOTING)) throw new PartyException("There is already a vote going on right now!");
+                    if (dailies.Any(x => x.State == PartyState.Voting)) throw new PartyException("There is already a vote going on right now!");
                     if (dailies.Count >= 2) throw new PartyException("There has been already 2 events today! Try again tomorrow.");
-
+                    
                     var msg = await _runner.SendMessage("Do you Want a SvS Match Right Now ?", 700712690288427129);
-                    var emote = Emote.Parse(_config.GetSection("discord").GetSection("emotes")["vote"]);
-                    var datetime = DateTimeOffset.Now;
-                    await msg.AddReactionAsync(emote, null);
-
+                    var emoji = new Emoji("\uD83D\uDC94");
+                    var datetime = DateTime.UtcNow;
+                    await msg.AddReactionAsync(emoji, null);
+                    
                     await _partyService.AddPartyAsync(new PartySchema
                     {
                         CreatedDate = datetime,
                         InitiatedBy = Context.User.Username,
                         Region = region,
-                        State = PartyState.VOTING,
-                        ExpiryDate = DateTimeOffset.Now + TimeSpan.FromMinutes(30),
+                        State = PartyState.Voting,
+                        ExpiryDate = DateTime.UtcNow + TimeSpan.FromMinutes(30),
                         MessageId = msg.Id
                     });
                 }
+                
+                
 
                 // TODO here:
                 // Send message or embed to Appropriate channel, e.g. EU = #snipetrain-tf2-eu (Done)

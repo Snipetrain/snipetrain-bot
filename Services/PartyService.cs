@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using snipetrain_bot.Models;
 using Discord.WebSocket;
+using MongoDB.Bson;
+
 namespace snipetrain_bot.Services
 {
     public class PartyService : IPartyService
@@ -27,7 +29,7 @@ namespace snipetrain_bot.Services
         }
         public async Task<List<PartySchema>> GetDailyPartiesAsync()
         {
-            return (await _parties.FindAsync(s => DateTimeOffset.Now - s.CreatedDate < TimeSpan.FromDays(1))).ToList();
+            return (await _parties.FindAsync(s => s.CreatedDate.TimeOfDay < TimeSpan.FromDays(1))).ToList();
         }
         public async Task<PartySchema> GetPartyAsync(string id)
         {
@@ -43,11 +45,14 @@ namespace snipetrain_bot.Services
         }
         public async Task<PartySchema> GetVotingPartyAsync()
         {
-            return await (await _parties.FindAsync(s => s.State == PartyState.VOTING)).FirstOrDefaultAsync();
+            return await (await _parties.FindAsync(s => s.State == PartyState.Voting)).FirstOrDefaultAsync();
         }
         public async Task UpdatePartyStateAsync(PartySchema party, PartyState PartyState)
         {
-            party.State = PartyState;
+            var partyid = party.Id;
+            var filter = Builders<PartySchema>.Filter.Eq("id", partyid);
+            var update = Builders<PartySchema>.Update.Set("State", PartyState);
+            await _parties.UpdateOneAsync(filter, update);
         }
     }
 }

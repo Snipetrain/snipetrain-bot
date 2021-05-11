@@ -11,9 +11,10 @@ namespace snipetrain_bot.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         [BsonElement("CreatedDate")]
-        public DateTimeOffset CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+
         [BsonElement("ExpiryDate")]
-        public DateTimeOffset ExpiryDate { get; set; }
+        public DateTime ExpiryDate { get; set; }
         [BsonElement("InitiatedBy")]
         public string InitiatedBy { get; set; }
         [BsonElement("Region")]
@@ -27,8 +28,8 @@ namespace snipetrain_bot.Models
 
     public enum PartyState
     {
-        INACTIVE = 0,
-        VOTING = 1,
-        COMPLETED = 2
+        Inactive = 0,
+        Voting = 1,
+        Completed = 2
     }
 }

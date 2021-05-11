@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Discord;
 using System.Threading.Tasks;
@@ -161,20 +162,28 @@ namespace snipetrain_bot
 
         public async Task ReactionMonitoring(Cacheable<IUserMessage, ulong> message,ISocketMessageChannel channel, SocketReaction reaction)
         {
-            var votingParty = await _partyService.GetVotingPartyAsync();
-            var votingPartyId = votingParty.MessageId;
-            var reactionCode = _config.GetSection("discord").GetSection("emotes")["vote"];
-
-
-            if (message.Id == votingPartyId && reaction.Emote.Name == reactionCode && channel.Name == "eu-channel" || channel.Name == "na-channel")
+            try
             {
-                var partyMessage = await channel.GetMessageAsync(votingPartyId);
-                if (partyMessage.Reactions.Count >= 2)
+                var votingParty = await _partyService.GetVotingPartyAsync();
+                var votingPartyId = votingParty.MessageId;
+                var reactionCode = _config.GetSection("discord").GetSection("emotes")["vote"];
+
+                if (message.Id == votingPartyId && reaction.Emote.Name == reactionCode && (channel.Name == "eu-channel" ||
+                    channel.Name == "na-channel"))
                 {
-                    await _partyService.UpdatePartyStateAsync(votingParty, Models.PartyState.VOTING);
-                    await SendMessage("IT WORKED",765288858601521172);
+                    var partyMessage = await channel.GetMessageAsync(votingPartyId);
+                    if (partyMessage.Reactions.Count() == 1)
+                    {
+                        await _partyService.UpdatePartyStateAsync(votingParty, Models.PartyState.Completed);
+                        await SendMessage("IT WORKED", 309459839296208897);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            
         }
 
     }
