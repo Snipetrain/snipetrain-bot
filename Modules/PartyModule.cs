@@ -34,7 +34,7 @@ namespace snipetrain_bot.Modules
                     if (dailies.Any(x => x.State == PartyState.Voting)) throw new PartyException("There is already a vote going on right now!");
                     if (dailies.Count >= 2) throw new PartyException("There has been already 2 events today! Try again tomorrow.");
                     
-                    var msg = await _runner.SendMessage("Do you Want a SvS Match Right Now ?", 771142492032598019);
+                    var msg = await _runner.SendMessage("Do you Want a SvS Match Right Now ?", 747139803711012884);
                     var emoji = new Emoji("\uD83D\uDC94");
                     var datetime = DateTime.UtcNow;
                     await msg.AddReactionAsync(emoji, null);
@@ -55,7 +55,7 @@ namespace snipetrain_bot.Modules
                     if (dailies.Any(x => x.State == PartyState.Voting)) throw new PartyException("There is already a vote going on right now!");
                     if (dailies.Count >= 2) throw new PartyException("There has been already 2 events today! Try again tomorrow.");
                     
-                    var msg = await _runner.SendMessage("Do you Want a SvS Match Right Now ?", 771142492032598019);
+                    var msg = await _runner.SendMessage("Do you Want a SvS Match Right Now ?", 700712690288427129);
                     var emoji = new Emoji("\uD83D\uDC94");
                     var datetime = DateTime.UtcNow;
                     await msg.AddReactionAsync(emoji, null);

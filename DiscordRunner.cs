@@ -166,16 +166,18 @@ namespace snipetrain_bot
             {
                 var votingParty = await _partyService.GetVotingPartyAsync();
                 var votingPartyId = votingParty.MessageId;
-                var reactionCode = _config.GetSection("discord").GetSection("emotes")["vote"];
-
+                var reactionCode = ("\uD83D\uDC94");
+                
                 if (message.Id == votingPartyId && reaction.Emote.Name == reactionCode && (channel.Name == "eu-channel" ||
                     channel.Name == "na-channel"))
                 {
+                    var emote = new Emoji("\uD83D\uDC94");
                     var partyMessage = await channel.GetMessageAsync(votingPartyId);
-                    if (partyMessage.Reactions.Count() == 1)
+                    var count = partyMessage.Reactions[emote].ReactionCount;
+                    if (count == 2)
                     {
-                        await _partyService.UpdatePartyStateAsync(votingParty, Models.PartyState.Completed);
                         await SendMessage("IT WORKED", 309459839296208897);
+                        await _partyService.UpdatePartyStateAsync(votingParty, Models.PartyState.Completed);
                     }
                 }
             }

@@ -50,9 +50,10 @@ namespace snipetrain_bot.Services
         public async Task UpdatePartyStateAsync(PartySchema party, PartyState PartyState)
         {
             var partyid = party.Id;
+            var newparty = await GetPartyAsync(partyid);
+            newparty.State = PartyState.Completed;
             var filter = Builders<PartySchema>.Filter.Eq("id", partyid);
-            var update = Builders<PartySchema>.Update.Set("State", PartyState);
-            await _parties.UpdateOneAsync(filter, update);
+            await _parties.ReplaceOneAsync(filter, newparty);
         }
     }
 }
