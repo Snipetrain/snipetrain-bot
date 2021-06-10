@@ -19,7 +19,7 @@ namespace snipetrain_bot.HostedServices
         private readonly DiscordRunner _runner;
         private readonly IConfiguration _config;
 
-        public ScheduledPartyHostedService(IPartyService partyService, DiscordRunner runner,IConfiguration config)
+        public ScheduledPartyHostedService(IPartyService partyService, DiscordRunner runner, IConfiguration config)
         {
             _partyService = partyService;
             _runner = runner;
@@ -29,7 +29,7 @@ namespace snipetrain_bot.HostedServices
         public Task StartAsync(CancellationToken stoppingToken)
         {
 
-            var seconds = 60;
+            var seconds = 30;
             _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(seconds));
 
             return Task.CompletedTask;
@@ -37,7 +37,17 @@ namespace snipetrain_bot.HostedServices
 
         private async void DoWork(object state)
         {
-            
+            var votingParties = await _partyService.GetVotingPartyAsync();
+
+            if (votingParties != null)
+            {
+                if (votingParties.ExpiryDate <= DateTime.UtcNow)
+                {
+                    await _runner.SendMessage("Expired.", 309459839296208897);
+                    await _partyService.UpdatePartyStateAsync(votingParties, Models.PartyState.Inactive);
+                }
+            }
+
         }
 
         public Task StopAsync(CancellationToken stoppingToken)

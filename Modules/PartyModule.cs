@@ -36,16 +36,15 @@ namespace snipetrain_bot.Modules
                     
                     var msg = await _runner.SendMessage("Do you Want a SvS Match Right Now ?", 747139803711012884);
                     var emoji = new Emoji("\uD83D\uDC94");
-                    var datetime = DateTime.UtcNow;
-                    await msg.AddReactionAsync(emoji, null);
                     
+                    await msg.AddReactionAsync(emoji, null);
                     await _partyService.AddPartyAsync(new PartySchema
                     {
-                        CreatedDate = datetime,
+                        CreatedDate = DateTime.UtcNow,
                         InitiatedBy = Context.User.Username,
                         Region = region,
                         State = PartyState.Voting,
-                        ExpiryDate = DateTime.UtcNow + TimeSpan.FromMinutes(30),
+                        ExpiryDate = DateTime.UtcNow + TimeSpan.FromMinutes(1),
                         MessageId = msg.Id
                     });
                     
@@ -66,12 +65,10 @@ namespace snipetrain_bot.Modules
                         InitiatedBy = Context.User.Username,
                         Region = region,
                         State = PartyState.Voting,
-                        ExpiryDate = DateTime.UtcNow + TimeSpan.FromMinutes(30),
+                        ExpiryDate = DateTime.UtcNow + TimeSpan.FromMinutes(1),
                         MessageId = msg.Id
                     });
                 }
-                
-                
 
                 // TODO here:
                 // Send message or embed to Appropriate channel, e.g. EU = #snipetrain-tf2-eu (Done)
