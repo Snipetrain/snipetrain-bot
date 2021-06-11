@@ -44,7 +44,7 @@ namespace snipetrain_bot.HostedServices
 
                 foreach (var party in partyList)
                 {
-                    var DateCompVal = party.EventDay.CompareTo(DateTimeOffset.Now);
+                    /*var DateCompVal = party.EventDay.CompareTo(DateTimeOffset.Now);
 
                     if (DateCompVal <= 0)
                     {
@@ -57,7 +57,7 @@ namespace snipetrain_bot.HostedServices
                             await _runner.SendMessage($"<@&{roleId}>  an EU Event is Starting Right Now", ChannelEU);
                         }
                         await _partyService.RemovePartyAsync(party.Id);
-                    }
+                    }*/
                 }
             }
             catch (System.Exception e)
