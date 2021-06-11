@@ -14,7 +14,6 @@ namespace snipetrain_bot.HostedServices
     {
 
         private Timer _timer;
-        private readonly ILogger<ScheduledPartyHostedService> _logger;
         private readonly IPartyService _partyService;
         private readonly DiscordRunner _runner;
         private readonly IConfiguration _config;
@@ -37,14 +36,21 @@ namespace snipetrain_bot.HostedServices
 
         private async void DoWork(object state)
         {
-            var votingParties = await _partyService.GetVotingPartyAsync();
+            var votingParty = await _partyService.GetVotingPartyAsync();
 
-            if (votingParties != null)
+            if (votingParty != null)
             {
-                if (votingParties.ExpiryDate <= DateTime.UtcNow)
+                if (votingParty.ExpiryDate <= DateTime.UtcNow)
                 {
-                    await _runner.SendMessage("Expired.", 309459839296208897);
-                    await _partyService.UpdatePartyStateAsync(votingParties, Models.PartyState.Inactive);
+                    await _partyService.UpdatePartyStateAsync(votingParty, Models.PartyState.Inactive);
+                    if (votingParty.Region == "EU")
+                    {
+                        await _runner.SendMessage("Vote Has Expired.", 751102593769537627);
+                    }
+                    else if (votingParty.Region == "US")
+                    {
+                        await _runner.SendMessage("Vote Has Expired.", 751102535091093580);
+                    }
                 }
             }
 

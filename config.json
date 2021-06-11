@@ -1,0 +1,44 @@
+{
+    "prefixChar": "!",
+    "discord": {
+        "token": "",
+        "guildId": 771142492032598016,
+        "emotes": {
+            "stream": "mm",
+            "vote":""
+        },
+        "channels": {
+            "stream-announcement": 774057035012505630,
+            "snipetrain-tf2-us": 751102535091093580,
+            "snipetrain-tf2-eu": 751102593769537627
+        },
+        "messages": {
+            "streamReaction": 774728592851599393
+        },
+        "roles": {
+            "stream": {
+                "id": "774722305506672680",
+                "name": "StreamWatchers"
+            },
+            "event_mention" : {
+                "id": "553970720812695592"
+            }
+        }
+    },
+    "twitch": {
+        "clientId": "",
+        "clientSecret": "",
+        "endpoints": {
+            "twitch-api": "https://api.twitch.tv/helix",
+            "twitch-auth": "https://id.twitch.tv/oauth2"
+        }
+    },
+    "snipetrain": {
+        "endpoints": {
+            "snipetrain-api": "http://localhost:5000"
+        }
+    },
+    "connectionStrings": {
+        "snipetrain": "mongodb://localhost:27017"
+    }
+}

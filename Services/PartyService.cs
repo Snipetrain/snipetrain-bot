@@ -13,9 +13,6 @@ namespace snipetrain_bot.Services
     public class PartyService : IPartyService
     {
         private readonly IMongoCollection<PartySchema> _parties;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IConfiguration _config;
-
         public PartyService(IConfiguration configuration)
         {
             var client = new MongoClient(configuration.GetSection("connectionStrings")["snipetrain"]);
