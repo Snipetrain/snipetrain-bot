@@ -28,7 +28,7 @@ namespace snipetrain_bot.HostedServices
         public Task StartAsync(CancellationToken stoppingToken)
         {
 
-            var seconds = 30;
+            var seconds = Int32.Parse(_config.GetSection("discord")["timer-timespan"]);
             _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(seconds));
 
             return Task.CompletedTask;
