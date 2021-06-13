@@ -12,7 +12,7 @@ namespace snipetrain_bot.Models
         public string Id { get; set; }
         [BsonElement("CreatedDate")]
         public DateTimeOffset CreatedDate { get; set; }
-        [BsonElement("CreatedDate")]
+        [BsonElement("ExpiryDate")]
         public DateTimeOffset ExpiryDate { get; set; }
         [BsonElement("InitiatedBy")]
         public string InitiatedBy { get; set; }
