@@ -42,14 +42,17 @@ namespace snipetrain_bot.HostedServices
             {
                 if (votingParty.ExpiryDate <= DateTime.UtcNow)
                 {
+                    var channelEU = ulong.Parse(_config.GetSection("discord").GetSection("channels")["snipetrain-tf2-eu"]);
+                    var channelUS = ulong.Parse(_config.GetSection("discord").GetSection("channels")["snipetrain-tf2-us"]);
+
                     await _partyService.UpdatePartyStateAsync(votingParty, Models.PartyState.Inactive);
                     if (votingParty.Region == "EU")
                     {
-                        await _runner.SendMessage("Vote Has Expired.", 751102593769537627);
+                        await _runner.SendMessage("Vote Has Expired.", channelEU);
                     }
                     else if (votingParty.Region == "US")
                     {
-                        await _runner.SendMessage("Vote Has Expired.", 751102535091093580);
+                        await _runner.SendMessage("Vote Has Expired.", channelUS);
                     }
                 }
             }
