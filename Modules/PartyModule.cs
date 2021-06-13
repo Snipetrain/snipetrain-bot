@@ -30,7 +30,9 @@ namespace snipetrain_bot.Modules
                 var dailies = (await _partyService.GetPartiesAsync())
                     .Where(x => x.CreatedDate.TimeOfDay < TimeSpan.FromDays(1))
                     .ToList();
-
+                
+                if (region != "EU" || region != "US") throw new PartyException("Usage: !event <NA|EU>");
+                
                 if (region == "EU")
                 {
                     if (dailies.Any(x => x.State == PartyState.Voting)) throw new PartyException("There is already a vote going on right now!");
