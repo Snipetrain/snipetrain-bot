@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using snipetrain_bot.Services;
+using snipetrain_bot.Models;
+using System.Linq;
 
 namespace snipetrain_bot.HostedServices
 {
@@ -12,12 +14,11 @@ namespace snipetrain_bot.HostedServices
     {
 
         private Timer _timer;
-        private readonly ILogger<ScheduledPartyHostedService> _logger;
         private readonly IPartyService _partyService;
         private readonly DiscordRunner _runner;
         private readonly IConfiguration _config;
 
-        public ScheduledPartyHostedService(IPartyService partyService, DiscordRunner runner,IConfiguration config)
+        public ScheduledPartyHostedService(IPartyService partyService, DiscordRunner runner, IConfiguration config)
         {
             _partyService = partyService;
             _runner = runner;
@@ -27,7 +28,7 @@ namespace snipetrain_bot.HostedServices
         public Task StartAsync(CancellationToken stoppingToken)
         {
 
-            var seconds = 60;
+            var seconds = Int32.Parse(_config.GetSection("discord")["timer-timespan"]);
             _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(seconds));
 
             return Task.CompletedTask;
@@ -35,36 +36,27 @@ namespace snipetrain_bot.HostedServices
 
         private async void DoWork(object state)
         {
-            try
+            var votingParty = await _partyService.GetVotingPartyAsync();
+
+            if (votingParty != null)
             {
-                var partyList = await _partyService.GetPartiesAsync();
-                var ChannelNA = ulong.Parse(_config.GetSection("channels")["snipetrain-tf2-us"]);
-                var ChannelEU = ulong.Parse(_config.GetSection("channels")["snipetrain-tf2-eu"]);
-                var roleId = _config.GetSection("roles").GetSection("event_mention")["id"];
-
-                foreach (var party in partyList)
+                if (votingParty.ExpiryDate <= DateTime.UtcNow)
                 {
-                    /*var DateCompVal = party.EventDay.CompareTo(DateTimeOffset.Now);
+                    var channelEU = ulong.Parse(_config.GetSection("discord").GetSection("channels")["snipetrain-tf2-eu"]);
+                    var channelUS = ulong.Parse(_config.GetSection("discord").GetSection("channels")["snipetrain-tf2-us"]);
 
-                    if (DateCompVal <= 0)
+                    await _partyService.UpdatePartyStateAsync(votingParty, Models.PartyState.Inactive);
+                    if (votingParty.Region == "EU")
                     {
-                        if (party.Region == "NA")
-                        {
-                            await _runner.SendMessage($"<@&{roleId}>  an NA Event is Starting Right Now", ChannelNA);
-                        }
-                        if (party.Region == "EU")
-                        {
-                            await _runner.SendMessage($"<@&{roleId}>  an EU Event is Starting Right Now", ChannelEU);
-                        }
-                        await _partyService.RemovePartyAsync(party.Id);
-                    }*/
+                        await _runner.SendMessage("Vote Has Expired.", channelEU);
+                    }
+                    else if (votingParty.Region == "US")
+                    {
+                        await _runner.SendMessage("Vote Has Expired.", channelUS);
+                    }
                 }
             }
-            catch (System.Exception e)
-            {
 
-                Console.WriteLine(e.ToString());
-            }
         }
 
         public Task StopAsync(CancellationToken stoppingToken)

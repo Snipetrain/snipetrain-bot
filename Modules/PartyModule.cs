@@ -5,6 +5,7 @@ using snipetrain_bot.Models;
 using snipetrain_bot.Services;
 using Discord;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace snipetrain_bot.Modules
 {
@@ -12,9 +13,13 @@ namespace snipetrain_bot.Modules
     public class PartyModule : ModuleBase
     {
         private readonly IPartyService _partyService;
-        public PartyModule(IPartyService partyService)
+        private readonly DiscordRunner _runner;
+        private readonly IConfiguration _config;
+        public PartyModule(IPartyService partyService, DiscordRunner runner,IConfiguration config)
         {
             _partyService = partyService;
+            _runner = runner;
+            _config = config;
         }
 
         [Command()]
@@ -22,31 +27,59 @@ namespace snipetrain_bot.Modules
         {
             try
             {
-
+                var dailies = (await _partyService.GetPartiesAsync())
+                    .Where(x => x.CreatedDate.TimeOfDay < TimeSpan.FromDays(1))
+                    .ToList();
+                
                 if (region != "EU" || region != "US") throw new PartyException("Usage: !event <NA|EU>");
+                
+                if (region == "EU")
+                {
+                    if (dailies.Any(x => x.State == PartyState.Voting)) throw new PartyException("There is already a vote going on right now!");
+                    if (dailies.Count >= 2) throw new PartyException("There has been already 2 events today! Try again tomorrow.");
 
+                    var channelEU = ulong.Parse(_config.GetSection("discord").GetSection("channels")["snipetrain-tf2-eu"]);
+                    var msg = await _runner.SendMessage("Do you Want a SvS Match Right Now ?", channelEU);
+                    var emoji = new Emoji("\uD83D\uDC94");
+                    
+                    await msg.AddReactionAsync(emoji, null);
 
-                var dailies = await _partyService.GetDailyPartiesAsync();
+                    await _partyService.AddPartyAsync(new PartySchema
+                    {
+                        CreatedDate = DateTime.UtcNow,
+                        InitiatedBy = Context.User.Username,
+                        Region = region,
+                        State = PartyState.Voting,
+                        ExpiryDate = DateTime.UtcNow + TimeSpan.FromMinutes(1),
+                        MessageId = msg.Id
+                    });
+                    
+                }
+                else if (region == "US")
+                {
+                    if (dailies.Any(x => x.State == PartyState.Voting)) throw new PartyException("There is already a vote going on right now!");
+                    if (dailies.Count >= 2) throw new PartyException("There has been already 2 events today! Try again tomorrow.");
+                    
+                    var channelUS = ulong.Parse(_config.GetSection("discord").GetSection("channels")["snipetrain-tf2-us"]);
+                    var msg = await _runner.SendMessage("Do you Want a SvS Match Right Now ?", channelUS);
+                    var emoji = new Emoji("\uD83D\uDC94");
 
-                if (dailies.Count >= 2) throw new PartyException("There has been already 2 events today! Try again tomorrow.");
-  
-                if (dailies.Any(x => x.State == PartyState.VOTING)) throw new PartyException("There is already a vote going on right now!");
+                    await msg.AddReactionAsync(emoji, null);
+
+                    await _partyService.AddPartyAsync(new PartySchema
+                    {
+                        CreatedDate = DateTime.UtcNow,
+                        InitiatedBy = Context.User.Username,
+                        Region = region,
+                        State = PartyState.Voting,
+                        ExpiryDate = DateTime.UtcNow + TimeSpan.FromMinutes(1),
+                        MessageId = msg.Id
+                    });
+                }
 
                 // TODO here:
-                // Send message or embed to Appropriate channel, e.g. EU = #snipetrain-tf2-eu
-                // Start monitoring reactions with any emote and wait for count of 6.
-                // if count >= 6 then send @everyone ping to #announcements with quick connect link to game server
-                // In the future we can add steam group automatic announcement
+                // In the future we can add steam group automatic announcement (On Hold)
 
-                await _partyService.AddPartyAsync(new PartySchema
-                {
-                    CreatedDate = DateTimeOffset.Now,
-                    InitiatedBy = Context.User.Username,
-                    Region = region,
-                    State = PartyState.VOTING,
-                    ExpiryDate = DateTimeOffset.Now + TimeSpan.FromMinutes(30)
-                });
-                
             }
             catch (PartyException e)
             {

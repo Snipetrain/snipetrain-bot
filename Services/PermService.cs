@@ -18,9 +18,9 @@ namespace snipetrain_bot.Services
             var client = new MongoClient(configuration.GetSection("connectionStrings")["snipetrain"]);
             var database = client.GetDatabase("userInteractions");
 
-            _Kick = database.GetCollection<PermissionSchema>("kick");
-            _Ban = database.GetCollection<PermissionSchema>("ban");
-            _Warn = database.GetCollection<PermissionSchema>("warn");
+            _Kick = database.GetCollection<PermissionSchema>("Kick");
+            _Ban = database.GetCollection<PermissionSchema>("Ban");
+            _Warn = database.GetCollection<PermissionSchema>("Warn");
 
         }
         public async Task AddKickAsync(PermissionSchema model)

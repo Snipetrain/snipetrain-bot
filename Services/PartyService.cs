@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Discord;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using snipetrain_bot.Models;
+using Discord.WebSocket;
+using MongoDB.Bson;
 
 namespace snipetrain_bot.Services
 {
     public class PartyService : IPartyService
     {
         private readonly IMongoCollection<PartySchema> _parties;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IConfiguration _config;
-
         public PartyService(IConfiguration configuration)
         {
             var client = new MongoClient(configuration.GetSection("connectionStrings")["snipetrain"]);
@@ -26,7 +26,7 @@ namespace snipetrain_bot.Services
         }
         public async Task<List<PartySchema>> GetDailyPartiesAsync()
         {
-            return (await _parties.FindAsync(s => DateTimeOffset.Now - s.CreatedDate < TimeSpan.FromDays(1))).ToList();
+            return (await _parties.FindAsync(s => s.CreatedDate.TimeOfDay < TimeSpan.FromDays(1))).ToList();
         }
         public async Task<PartySchema> GetPartyAsync(string id)
         {
@@ -39,6 +39,16 @@ namespace snipetrain_bot.Services
         public async Task RemovePartyAsync(string id)
         {
             await _parties.DeleteOneAsync(s => s.Id == id);
+        }
+        public async Task<PartySchema> GetVotingPartyAsync()
+        {
+            return await (await _parties.FindAsync(s => s.State == PartyState.Voting)).FirstOrDefaultAsync();
+        }
+        public async Task UpdatePartyStateAsync(PartySchema party, PartyState PartyState)
+        {
+            var filter  = Builders<PartySchema>.Filter.Eq("State" , PartyState.Voting);
+            var update = Builders<PartySchema>.Update.Set("State", PartyState);
+            await _parties.UpdateOneAsync(filter,update);
         }
     }
 }

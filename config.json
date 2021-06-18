@@ -4,7 +4,8 @@
         "token": "",
         "guildId": 771142492032598016,
         "emotes": {
-            "stream": "mm"
+            "stream": "mm",
+            "vote":""
         },
         "channels": {
             "stream-announcement": 774057035012505630,
@@ -22,7 +23,8 @@
             "event_mention" : {
                 "id": "553970720812695592"
             }
-        }
+        },
+        "timer-timespan": 60
     },
     "twitch": {
         "clientId": "",
